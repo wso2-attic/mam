@@ -1,0 +1,26 @@
+<%
+
+var current_user = session.get('mamConsoleUser');
+var current_user_roles =undefined;
+if(current_user!=undefined){
+	current_user_roles = current_user.roles;
+}
+log.info('inside');
+
+var goose = require('modules/goose.js').goose;
+var router = new goose({
+	CONTEXT: "/mam/api/",
+	AUTH_SUPPORT: true, 
+	AUTH_USER_ROLES: current_user_roles
+});
+var configs = require('config/config.json');
+
+var absolute = require ('modules/absolute.js').mvc;
+var mvc = new absolute({
+	SERVER_URL:"/mam/",
+	IGNORE:["acs.jag", "login.jag", "logout.jag"],
+	API:"api",
+	ROUTER: router
+});
+mvc.route(request);
+%>
