@@ -13,6 +13,9 @@ var router = new goose({
 	AUTH_SUPPORT: true, 
 	AUTH_USER_ROLES: current_user_roles
 });
+//Setting up the authorization roles
+router.setupRules(require('/config/route.json'));
+
 var configs = require('config/config.json');
 
 var absolute = require ('modules/absolute.js').mvc;
@@ -21,6 +24,14 @@ var mvc = new absolute({
 	IGNORE:["acs.jag", "login.jag", "logout.jag"],
 	API:"api",
 	ROUTER: router
+});
+
+mvc.registerHelper('showActive', function(currentPage, page, options) {
+  if(currentPage == page){
+  	return "active";
+  }else{
+  	return "";
+  }
 });
 mvc.route(request);
 %>

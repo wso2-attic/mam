@@ -6,4 +6,14 @@ var dashboard = function(appController){
 	context.data = {		
 	}
 	return context;
-}
+};
+
+var management = function(appController){
+	context = appController.context();
+	context.title = context.ui.TITLE + " | Manage Apps";	
+	context.jsFile= "console_management.js";
+	context.page = "management";
+	context.data = {		
+	}
+	return context;
+};

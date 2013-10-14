@@ -27,35 +27,37 @@ var navigation = function(role) {
             break;
         default:
     };
-    var currentUser = session.get("mamConsoleUser");
+    // var currentUser = session.get("mamConsoleUser");
+	var currentUser = true;
     var topNavigation = [];
     var configNavigation = [];
     if(currentUser){
         if(role == 'admin'){
+			var app_info = uiConfig();
             topNavigation = [
-                {name : "Dashboard"	, link: appInfo().server_url + "console/dashboard", displayPage: "dashboard", icon: "icon-th-large"},
-                {name : "Configurations", link: appInfo().server_url + "users/configuration", displayPage: "configuration", icon:"icon-wrench"},
-                {name : "Management"	, link: appInfo().server_url + "devices/management", displayPage: "management", icon:"icon-briefcase"},
+                {name : "Dashboard"	, link: app_info.MAM_UI_URI + "console/dashboard", displayPage: "dashboard", icon: "icon-th-large"},
+                {name : "Configurations", link: app_info.MAM_UI_URI + "users/configuration", displayPage: "configuration", icon:"icon-wrench"},
+                {name : "Management"	, link: app_info.MAM_UI_URI + "console/management", displayPage: "management", icon:"icon-briefcase"},
             ];
             var configNavigation =	[
-                {name : "Users", link: appInfo().server_url + "users/configuration", displayPage: "users", icon:"icon-user"},
-                {name : "Roles", link: appInfo().server_url + "roles/configuration", displayPage: "roles", icon:"icon-group"},
-                {name : "Policies", link: appInfo().server_url + "policies/configuration", displayPage: "policies", icon:"icon-lock"},
+                {name : "Users", link: app_info.MAM_UI_URI + "users/configuration", displayPage: "users", icon:"icon-user"},
+                {name : "Roles", link: app_info.MAM_UI_URI + "roles/configuration", displayPage: "roles", icon:"icon-group"},
+                {name : "Policies", link: app_info.MAM_UI_URI + "policies/configuration", displayPage: "policies", icon:"icon-lock"},
             ];
         }else if(role == 'mdmadmin'){
             topNavigation = [
-                {name : "Dashboard"	, link: appInfo().server_url + "console/dashboard", displayPage: "dashboard", icon: "icon-th-large"},
-                {name : "Configurations", link: appInfo().server_url + "users/configuration", displayPage: "configuration", icon:"icon-wrench"},
-                {name : "Management"	, link: appInfo().server_url + "devices/management", displayPage: "management", icon:"icon-briefcase"},
+                {name : "Dashboard"	, link: app_info.MAM_UI_URI + "console/dashboard", displayPage: "dashboard", icon: "icon-th-large"},
+                {name : "Configurations", link: app_info.MAM_UI_URI + "users/configuration", displayPage: "configuration", icon:"icon-wrench"},
+                {name : "Management"	, link: app_info.MAM_UI_URI + "devices/management", displayPage: "management", icon:"icon-briefcase"},
             ];
             var configNavigation =	[
-                {name : "Users", link: appInfo().server_url + "users/configuration", displayPage: "users", icon:"icon-user"},
-                {name : "Roles", link: appInfo().server_url + "roles/configuration", displayPage: "roles", icon:"icon-group"},
-                {name : "Policies", link: appInfo().server_url + "policies/configuration", displayPage: "policies", icon:"icon-lock"},
+                {name : "Users", link: app_info.MAM_UI_URI + "users/configuration", displayPage: "users", icon:"icon-user"},
+                {name : "Roles", link: app_info.MAM_UI_URI + "roles/configuration", displayPage: "roles", icon:"icon-group"},
+                {name : "Policies", link: app_info.MAM_UI_URI + "policies/configuration", displayPage: "policies", icon:"icon-lock"},
             ];
         }else{
             topNavigation = [
-                {name : "My Devices"	, link: appInfo().server_url + "users/devices", displayPage: "management", icon:"icon-briefcase"}
+                {name : "My Devices"	, link: app_info.MAM_UI_URI + "users/devices", displayPage: "management", icon:"icon-briefcase"}
             ];
         }
     }
@@ -64,9 +66,17 @@ var navigation = function(role) {
         topNavigation : topNavigation,
         configNavigation: configNavigation
     };
-
 };
+var theme = function(){
+	return require('/config/ui.json').MAM_THEME;
+}
 
+/*
+	Load the ui config json
+*/
+var uiConfig = function(){
+	return require('/config/ui.json');
+}
 
 /*
 	Initial context used by each controller
@@ -99,9 +109,11 @@ var context = function() {
     //        };
     //    }
 	var defaultContext = {
-		ui: require('/config/ui.json'),
+		ui: uiConfig(),
 		layout: '1-column',
-		navigation: navigation('admin')
+		navigation: navigation('admin'),
+		theme: theme(),
+		resourcePath: "../themes/" + theme() + "/img/"
 	};
     return defaultContext;
 };
