@@ -1,15 +1,28 @@
-// if(session.get("mamConsoleUserLogin") != "true" && request.getRequestURI() != appInfo().server_url + "login"){
-// 	response.sendRedirect(appInfo().server_url + "login");
-// }
+var theme = function(){
+	return require('/config/ui.json').MAM_THEME;
+}
+
+/*
+	Load the ui config json
+*/
+var uiConfig = function(){
+	return require('/config/ui.json');
+}
+
+var config = function(){
+	return require('/config/config.json');
+}
+
+if(session.get("mamConsoleUserLogin") != "true" && request.getRequestURI() != uiConfig().MAM_UI_URI + "login"){
+	response.sendRedirect(uiConfig().MAM_UI_URI  + "login");
+}
 var index = function(){
-	response.sendRedirect('console/dashboard');
-	// var user = session.get("mamConsoleUser");
-	// if(user!=null){
-	// 	if(user.isAdmin){
-	// 		response.sendRedirect('console/dashboard');
-	// 	}else{
-	// 		response.sendRedirect(appInfo().server_url + 'users/devices?user=' + userFeed.username);
-	// }
+	var user = session.get("mamConsoleUser");
+	if(user!=null){
+		if(user.isMAMAdmin){
+			response.sendRedirect('console/dashboard');
+		}
+	}
 };
 
 /*
@@ -67,16 +80,6 @@ var navigation = function(role) {
         configNavigation: configNavigation
     };
 };
-var theme = function(){
-	return require('/config/ui.json').MAM_THEME;
-}
-
-/*
-	Load the ui config json
-*/
-var uiConfig = function(){
-	return require('/config/ui.json');
-}
 
 /*
 	Initial context used by each controller
@@ -113,6 +116,9 @@ var context = function() {
 		layout: '1-column',
 		navigation: navigation('admin'),
 		theme: theme(),
+		config: config(),
+		userLogin : session.get("mamConsoleUserLogin"),
+        currentUser : session.get("mamConsoleUser"),
 		resourcePath: "../themes/" + theme() + "/img/"
 	};
     return defaultContext;

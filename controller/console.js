@@ -13,7 +13,10 @@ var management = function(appController){
 	context.title = context.ui.TITLE + " | Manage Apps";	
 	context.jsFile= "console_management.js";
 	context.page = "management";
-	context.data = {		
-	}
+	var storeModule = require('/modules/store.js').store;
+	var store = new storeModule();
+	context.data = {
+		apps: store.getAppsFromStore()		
+	};
 	return context;
 };

@@ -18,6 +18,130 @@ router.setupRules(require('/config/route.json'));
 
 var configs = require('config/config.json');
 
+/* 
+ Sample call - https://localhost:9443/mam/api/apps/roles/installed?platform=iOS&packageid=com.naveenium.foursquare
+*/
+router.get('apps/roles/installed', function(ctx){
+	var storeModule = require('/modules/store.js').store;
+	var store = new storeModule(db);
+	var platform;
+	if (ctx.platform.toUpperCase() == 'ANDROID'){
+		platform = 1;
+	}else if (ctx.platform.toUpperCase() == 'IOS'){
+		platform = 2;
+	}
+	var result = store.getRolesForAppInstalled({packageid: ctx.packageid, platform:platform});
+	response.content = result;
+});
+/* 
+ Sample call - https://localhost:9443/mam/api/apps/roles/not-installed?platform=iOS&packageid=com.naveenium.foursquare
+*/
+router.get('apps/roles/not-installed', function(ctx){
+	var storeModule = require('/modules/store.js').store;
+	var store = new storeModule(db);
+	var platform;
+	if (ctx.platform.toUpperCase() == 'ANDROID'){
+		platform = 1;
+	}else if (ctx.platform.toUpperCase() == 'IOS'){
+		platform = 2;
+	}
+	var result = store.getRolesForAppNotInstalled({packageid: ctx.packageid, platform:platform});
+	response.content = result;
+});
+/* 
+ Sample call - https://localhost:9443/mam/api/apps/roles/installed?platform=iOS&packageid=com.naveenium.foursquare
+*/
+router.get('apps/users/installed', function(ctx){
+	var storeModule = require('/modules/store.js').store;
+	var store = new storeModule(db);
+	var platform;
+	if (ctx.platform.toUpperCase() == 'ANDROID'){
+		platform = 1;
+	}else if (ctx.platform.toUpperCase() == 'IOS'){
+		platform = 2;
+	}
+	var result = store.getUsersForAppInstalled({packageid: ctx.packageid, platform:platform});
+	response.content = result;
+});
+/* 
+ Sample call - https://localhost:9443/mam/api/apps/roles/not-installed?platform=iOS&packageid=com.naveenium.foursquare
+*/
+router.get('apps/users/not-installed', function(ctx){
+	var storeModule = require('/modules/store.js').store;
+	var store = new storeModule(db);
+	var platform;
+	if (ctx.platform.toUpperCase() == 'ANDROID'){
+		platform = 1;
+	}else if (ctx.platform.toUpperCase() == 'IOS'){
+		platform = 2;
+	}
+	var result = store.getUsersForAppNotInstalled({packageid: ctx.packageid, platform:platform});
+	response.content = result;
+});
+router.post('apps/roles/uninstall', function(ctx){
+	var storeModule = require('/modules/store.js').store;
+	var store = new storeModule(db);
+	var platform;
+	if (ctx.platform.toUpperCase() == 'ANDROID'){
+		platform = 1;
+	}else if (ctx.platform.toUpperCase() == 'IOS'){
+		platform = 2;
+	}
+	var result = store.getRolesForAppInstalled({packageid: ctx.packageid, platform:platform});
+	var roles = ctx.roles;
+	for (var i = roles.length - 1; i >= 0; i--){
+		var role = roles[i];
+		var devices  = result[role];
+		if(devices!=undefined){
+			for (var j = devices.length - 1; j >= 0; j--){
+				var device = devices[j];
+				// store.uninstallApp({
+				// 					deviceid : device,
+				// 					packageId : ctx.packageid
+				// 				});
+			};
+		}
+	};
+	response.status=200;
+});
+router.post('apps/roles/install', function(ctx){
+	var storeModule = require('/modules/store.js').store;
+	var store = new storeModule(db);
+	var platform;
+	if (ctx.platform.toUpperCase() == 'ANDROID'){
+		platform = 1;
+	}else if (ctx.platform.toUpperCase() == 'IOS'){
+		platform = 2;
+	}
+	var installParam = ctx.url;
+	if(ctx.type == "Market"){
+		installParam = ctx.packageid;
+	}
+	var result = store.getRolesForAppNotInstalled({packageid: ctx.packageid, platform:platform});
+	var roles = ctx.roles;
+	for (var i = roles.length - 1; i >= 0; i--){
+		var role = roles[i];
+		var devices  = result[role];
+		if(devices!=undefined){
+			for (var j = devices.length - 1; j >= 0; j--){
+				var device = devices[j];
+				store.installApp({
+					deviceid : device,
+					installParam : ctx.packageid,
+					type: ctx.type
+				});
+			};
+		}
+	};
+	response.status=200;
+});
+router.get('test', function(){
+	var storeModule = require('/modules/store.js').store;
+	var store = new storeModule(db);
+	var result = store.getUsersForAppInstalled({packageid:'com.naveenium.foursquare', platform:1});
+	response.content = result;
+});
+
 var absolute = require ('modules/absolute.js').mvc;
 var mvc = new absolute({
 	SERVER_URL:"/mam/",
@@ -25,7 +149,40 @@ var mvc = new absolute({
 	API:"api",
 	ROUTER: router
 });
+mvc.registerHelper('stringify', function(context) {
+var log = new Log();log.error("CONTEXT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+stringify(context));
+    return stringify(context);
+});
+mvc.registerHelper('compare', function(lvalue, rvalue, options) {
 
+    if (arguments.length < 3)
+        throw new Error("Handlerbars Helper 'compare' needs 2 parameters");
+
+    operator = options.hash.operator || "==";
+
+    var operators = {
+        '==':       function(l,r) { return l == r; },
+        '===':      function(l,r) { return l === r; },
+        '!=':       function(l,r) { return l != r; },
+        '<':        function(l,r) { return l < r; },
+        '>':        function(l,r) { return l > r; },
+        '<=':       function(l,r) { return l <= r; },
+        '>=':       function(l,r) { return l >= r; },
+        'typeof':   function(l,r) { return typeof l == r; }
+    }
+
+    if (!operators[operator])
+        throw new Error("Handlerbars Helper 'compare' doesn't know the operator "+operator);
+
+    var result = operators[operator](lvalue,rvalue);
+
+    if( result ) {
+        return options.fn(this);
+    } else {
+        return options.inverse(this);
+    }
+
+});
 mvc.registerHelper('showActive', function(currentPage, page, options) {
   if(currentPage == page){
   	return "active";
