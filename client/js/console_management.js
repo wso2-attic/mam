@@ -225,7 +225,7 @@ $(document).ready(function() {
 				$('#users button').off('click').click(function(){
 					var users = [];
 					$('#users_not-installed .main-table input[type=checkbox]:checked').each(function(){
-						users.push($(this).data('role'));
+						users.push($(this).data('user'));
 					});
 					$.post('/mam/api/apps/users/install', JSON.stringify({
 						'users' : users,
