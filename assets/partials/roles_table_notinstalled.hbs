@@ -4,6 +4,7 @@
 			<th><input type="checkbox" name="tick" value=""></th>
 			<th>Role</th>
 			<th>Not-Installed Device count</th>
+			<th>Total Device count</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -12,6 +13,7 @@
 				<td><input type="checkbox" name="tick" data-role="{{key}}" value=""></td>
 				<td>{{key}}</td>
 				<td>{{value.device_count}}</td>
+				<td>{{value.total_devices}}</td>
 			</tr>
 		{{/key_value}}
 	</tbody>

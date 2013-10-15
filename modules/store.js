@@ -1,3 +1,5 @@
+var TENANT_CONFIGS = 'tenant.configs';
+var USER_MANAGER = 'user.manager';
 var store = (function () {
     var configs = {
         CONTEXT: "/"
@@ -30,6 +32,64 @@ var store = (function () {
         }
         return obj1;
     }
+	var carbon = require('carbon');
+   var server = function(){
+        return application.get("SERVER");
+    }
+
+    var configs = function (tenantId) {
+        var configg = application.get(TENANT_CONFIGS);
+        if (!tenantId) {
+            return configg;
+        }
+        return configs[tenantId] || (configs[tenantId] = {});
+    };
+
+    var userManager = function (tenantId) {
+        var config = configs(tenantId);
+        if (!config || !config[USER_MANAGER]) {
+            var um = new carbon.user.UserManager(server, tenantId);
+            config[USER_MANAGER] = um;
+            return um;
+        }
+        return configs(tenantId)[USER_MANAGER];
+    };
+	var getTenantID = function(){
+		if (Session["mamConsoleUser"]) {
+
+		//	return Session["mdmConsoleUser"]['tenantId'];
+	        return "-1234";
+		} else {
+		//	return null;
+	        return "-1234";
+		}
+	}
+	var getAllDeviceCountForGroup = function(role){
+		var um = userManager(getTenantID());
+		if(role!='Internal/everyone'){
+			var userList = um.getUserListOfRole(role);
+	        var deviceCountAll = 0;
+	        for(var j = 0; j < userList.length; j++) {
+	            var resultDeviceCount = db.query("SELECT COUNT(id) AS device_count FROM devices WHERE user_id = ? AND tenant_id = ?",
+	                String(userList[j]), getTenantID());
+	            deviceCountAll += parseInt(resultDeviceCount[0].device_count);
+	        }
+		}else{
+			deviceCountAll = db.query("SELECT COUNT(id) AS device_count FROM devices WHERE tenant_id = ?",
+	                 getTenantID())[0].device_count;
+	log.info('sdfdsfsdf');
+			log.info(deviceCountAll);
+		}
+        return deviceCountAll;
+	};
+	var getAllDeviceCountForUser = function(user){
+        var deviceCountAll = 0;
+            var resultDeviceCount = db.query("SELECT COUNT(id) AS device_count FROM devices WHERE user_id = ? AND tenant_id = ?",
+            String(user), getTenantID());
+        deviceCountAll += parseInt(resultDeviceCount[0].device_count);
+        return deviceCountAll;
+	};
+	
 
     // prototype
     module.prototype = {
@@ -158,6 +218,7 @@ var store = (function () {
 						}
 						userVal = returnResult[result.user_id];
 					}
+					userVal.total_devices = getAllDeviceCountForUser(result.user_id);
 					userVal.device_count = userVal.device_count+1;
 					userVal.devices.push(result.device_id);
 					userVal.roles = parse(userObj.roles);
@@ -185,6 +246,7 @@ var store = (function () {
 						}
 						userVal = returnResult[result.user_id];
 					}
+					userVal.total_devices = getAllDeviceCountForUser(result.user_id);
 					userVal.device_count = userVal.device_count+1;
 					userVal.devices.push(result.device_id);
 					userVal.roles = parse(userObj.roles);
@@ -217,6 +279,7 @@ var store = (function () {
 								}
 								roleVal = returnResult[role];
 							}
+							roleVal.total_devices = getAllDeviceCountForGroup(role);
 							roleVal.device_count = roleVal.device_count+1;
 							roleVal.devices.push(result.device_id);
 						};	
@@ -250,6 +313,8 @@ var store = (function () {
 								}
 								roleVal = returnResult[role];
 							}
+							
+							roleVal.total_devices = getAllDeviceCountForGroup(role);
 							roleVal.device_count = roleVal.device_count+1;
 							roleVal.devices.push(result.device_id);
 						};	
