@@ -14,7 +14,7 @@
 	<div class="well">
 		{{#each data.apps}}
 		<div class="app_box">
-			<a href="#appid" data-packageid="{{this.attributes.overview_packagename}}" data-platform="{{this.attributes.overview_platform}}" data-type="{{this.attributes.overview_type}}" data-type="{{this.attributes.overview_url}}">
+			<a href="#appid" data-packageid="{{this.attributes.overview_packagename}}" data-platform="{{this.attributes.overview_platform}}" data-type="{{this.attributes.overview_type}}" data-url="{{this.attributes.overview_url}}">
 				<p class="text-center"><b>{{this.attributes.overview_name}}</b></p>
 				<img src="{{../config.publisher_location}}{{this.attributes.images_thumbnail}}" class="icon img-polaroid">
 			</a>
@@ -29,7 +29,7 @@
 	  </li>
 	  <li><a href="#users" data-toggle="tab">Users</a></li>
 	</ul>
-	<div class="alert">
+	<div class="alert" style="display:none">
 	  <button type="button" class="close" data-dismiss="alert">&times;</button>
 	  <span><span>
 	</div>
@@ -51,8 +51,8 @@
 	  </div>
 	  <div class="tab-pane" id="users">
 			<ul class="nav nav-pills">
-			  <li class="active"><a href="#users_installed" data-toggle="tab">Installed</a></li>
-			  <li><a href="#users_not-installed" data-toggle="tab">Not-installed</a></li>
+			  <li class="active"><a class="install" href="#users_installed" data-toggle="tab">Installed</a></li>
+			  <li><a class="not-installed" href="#users_not-installed" data-toggle="tab">Not-installed</a></li>
 			<button class="btn pull-right btn-danger">Uninstall</button>
 			</ul>
 			<div class="tab-content">

@@ -20,7 +20,7 @@ var index = function(){
 	var user = session.get("mamConsoleUser");
 	if(user!=null){
 		if(user.isMAMAdmin){
-			response.sendRedirect('console/dashboard');
+			response.sendRedirect('console/management');
 		}
 	}
 };
@@ -48,7 +48,6 @@ var navigation = function(role) {
         if(role == 'admin'){
 			var app_info = uiConfig();
             topNavigation = [
-                {name : "Dashboard"	, link: app_info.MAM_UI_URI + "console/dashboard", displayPage: "dashboard", icon: "icon-th-large"},
                 {name : "Configurations", link: app_info.MAM_UI_URI + "users/configuration", displayPage: "configuration", icon:"icon-wrench"},
                 {name : "Management"	, link: app_info.MAM_UI_URI + "console/management", displayPage: "management", icon:"icon-briefcase"},
             ];
@@ -59,7 +58,6 @@ var navigation = function(role) {
             ];
         }else if(role == 'mdmadmin'){
             topNavigation = [
-                {name : "Dashboard"	, link: app_info.MAM_UI_URI + "console/dashboard", displayPage: "dashboard", icon: "icon-th-large"},
                 {name : "Configurations", link: app_info.MAM_UI_URI + "users/configuration", displayPage: "configuration", icon:"icon-wrench"},
                 {name : "Management"	, link: app_info.MAM_UI_URI + "devices/management", displayPage: "management", icon:"icon-briefcase"},
             ];

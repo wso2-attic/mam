@@ -84,7 +84,6 @@ $(document).ready(function() {
 	});
 	
 	var viewRolesNotInstalled = function(packageId,platform, type, url){
-		
 		$.get('/mam/api/apps/roles/not-installed', {
 			'platform':platform,
 			'packageid':packageId

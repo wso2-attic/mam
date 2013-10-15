@@ -72,7 +72,7 @@
 
 								var appController =require('/controller/app.js');
 								if(isMAMAdmin){
-									response.sendRedirect('console/dashboard');
+									response.sendRedirect('console/management');
 								}
                         }
 

@@ -12,6 +12,8 @@ var store = (function () {
     var userModule = require('user.js').user;
     var user = new userModule();
 
+	var mdmModule = require('mdm.js').mdm;
+    var mdm = new mdmModule();
     function mergeRecursive(obj1, obj2) {
         for (var p in obj2) {
             try {
@@ -255,13 +257,10 @@ var store = (function () {
 		uninstallApp: function(ctx){
 			var deviceid = ctx.deviceid;
 			var packageId = ctx.packageId;
-			var url = 'http://localhost:9763/mdm/api/devices/'+deviceid+'/AppUNInstall'; 
-			var xhr = new XMLHttpRequest();
-			xhr.open("GET", url);
-			xhr.send();
+			mdm.uninstall(packageId, deviceid);	
 		},
 		installApp: function(ctx){
-		// "type" : "Enterprise", "identity" : "http://localhost:9763/publisher/upload/mGc3Happ.apk"	
+			mdm.install(ctx.type,ctx.installParam, ctx.deviceid);	
 		},
 		getAllAppFromDevice: function(ctx){
 			var deviceId =  ctx.deviceId;

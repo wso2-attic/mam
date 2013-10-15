@@ -78,6 +78,9 @@ router.get('apps/users/not-installed', function(ctx){
 	var result = store.getUsersForAppNotInstalled({packageid: ctx.packageid, platform:platform});
 	response.content = result;
 });
+
+
+
 router.post('apps/roles/uninstall', function(ctx){
 	var storeModule = require('/modules/store.js').store;
 	var store = new storeModule(db);
@@ -91,14 +94,15 @@ router.post('apps/roles/uninstall', function(ctx){
 	var roles = ctx.roles;
 	for (var i = roles.length - 1; i >= 0; i--){
 		var role = roles[i];
-		var devices  = result[role];
-		if(devices!=undefined){
-			for (var j = devices.length - 1; j >= 0; j--){
-				var device = devices[j];
-				// store.uninstallApp({
-				// 					deviceid : device,
-				// 					packageId : ctx.packageid
-				// 				});
+		var row  = result[role];
+		
+		if(row!=undefined){
+			for (var j = row.devices.length - 1; j >= 0; j--){
+				var device = row.devices[j];
+				store.uninstallApp({
+					deviceid : device,
+					packageId : ctx.packageid
+				});
 			};
 		}
 	};
@@ -113,21 +117,22 @@ router.post('apps/roles/install', function(ctx){
 	}else if (ctx.platform.toUpperCase() == 'IOS'){
 		platform = 2;
 	}
-	var installParam = ctx.url;
+	var installParam = configs.publisher_location+"publisher"+ctx.url;
 	if(ctx.type == "Market"){
 		installParam = ctx.packageid;
 	}
+	log.info(installParam);
 	var result = store.getRolesForAppNotInstalled({packageid: ctx.packageid, platform:platform});
 	var roles = ctx.roles;
 	for (var i = roles.length - 1; i >= 0; i--){
 		var role = roles[i];
-		var devices  = result[role];
-		if(devices!=undefined){
-			for (var j = devices.length - 1; j >= 0; j--){
-				var device = devices[j];
+		var row  = result[role];
+		if(row!=undefined){
+			for (var j = row.devices.length - 1; j >= 0; j--){
+				var device = row.devices[j];
 				store.installApp({
 					deviceid : device,
-					installParam : ctx.packageid,
+					installParam : installParam,
 					type: ctx.type
 				});
 			};
@@ -135,6 +140,65 @@ router.post('apps/roles/install', function(ctx){
 	};
 	response.status=200;
 });
+router.post('apps/user/uninstall', function(ctx){
+	var storeModule = require('/modules/store.js').store;
+	var store = new storeModule(db);
+	var platform;
+	if (ctx.platform.toUpperCase() == 'ANDROID'){
+		platform = 1;
+	}else if (ctx.platform.toUpperCase() == 'IOS'){
+		platform = 2;
+	}
+	var result = store.getUsersForAppInstalled({packageid: ctx.packageid, platform:platform});
+	var users = ctx.users;
+	for (var i = users.length - 1; i >= 0; i--){
+		var user = users[i];
+		var row  = result[user];
+		if(row!=undefined){
+			for (var j = row.devices.length - 1; j >= 0; j--){
+				var device = row.devices[j];
+				store.uninstallApp({
+					deviceid : device,
+					packageId : ctx.packageid
+				});
+			};
+		}
+	};
+	response.status=200;
+});
+router.post('apps/users/install', function(ctx){
+	var storeModule = require('/modules/store.js').store;
+	var store = new storeModule(db);
+	var platform;
+	if (ctx.platform.toUpperCase() == 'ANDROID'){
+		platform = 1;
+	}else if (ctx.platform.toUpperCase() == 'IOS'){
+		platform = 2;
+	}
+	var installParam = configs.publisher_location+"publisher"+ctx.url;
+	if(ctx.type == "Market"){
+		installParam = ctx.packageid;
+	}
+	log.info(installParam);
+	var result = store.getUsersForAppNotInstalled({packageid: ctx.packageid, platform:platform});
+	var users = ctx.users;
+	for (var i = users.length - 1; i >= 0; i--){
+		var user = users[i];
+		var row  = result[user];
+		if(row!=undefined){
+			for (var j = row.devices.length - 1; j >= 0; j--){
+				var device = row.devices[j];
+				store.installApp({
+					deviceid : device,
+					installParam : installParam,
+					type: ctx.type
+				});
+			};
+		}
+	};
+	response.status=200;
+});
+
 router.get('test', function(){
 	var storeModule = require('/modules/store.js').store;
 	var store = new storeModule(db);
