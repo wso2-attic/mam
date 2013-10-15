@@ -48,7 +48,7 @@ body {
 }
 
 a, a:hover, a:focus {
-	color: #086F76;
+	color: #009A3D;
 }
 
 .container-fluid {
@@ -63,15 +63,15 @@ header .navbar-inner {
 	min-height: 40px;
 	padding-left: 20px;
 	padding-right: 20px;
-	background-color: #086F76;
-	background-image: -moz-linear-gradient(top, #097880, #076268);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#097880), to(#076268));
-	background-image: -webkit-linear-gradient(top, #097880, #076268);
-	background-image: -o-linear-gradient(top, #097880, #076268);
-	background-image: linear-gradient(to bottom, #097880, #076268);
+	background-color: #009A3D;
+	background-image: -moz-linear-gradient(top, #009437, #297A29);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#009437), to(#297A29));
+	background-image: -webkit-linear-gradient(top, #009437, #297A29);
+	background-image: -o-linear-gradient(top, #009437, #297A29);
+	background-image: linear-gradient(to bottom, #009437, #297A29);
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff28241', endColorstr='#fff07229', GradientType=0);
-	border: 1px solid #086F76;
+	border: 1px solid #009A3D;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
@@ -98,7 +98,7 @@ header .navbar .brand {
 	font-size: 20px;
 	font-weight: 200;
 	color: #ffffff;
-	text-shadow: 0 1px 0 #097880;
+	text-shadow: 0 1px 0 #009437;
 }
 
 header .navbar .nav > li > a {
@@ -106,7 +106,7 @@ header .navbar .nav > li > a {
 	padding: 10px 15px 10px;
 	color: #ffffff;
 	text-decoration: none;
-	text-shadow: 0 1px 0 #097880;
+	text-shadow: 0 1px 0 #009437;
 }
 
 header .navbar .nav > li > a:hover {
@@ -116,19 +116,19 @@ header .navbar .nav > li > a:hover {
 }
 
 header .navbar .nav > .active > a, header .navbar .nav > .active > a:hover, header .navbar .nav > .active > a:focus {
-	background-color: #063450;
+	background-color: #126312;
 	box-shadow: 0 3px 8px rgba(0, 0, 0, 0.125) inset;
 	color: #ffffff;
 	text-decoration: none;
 }
 
 header .navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
-	background-color: #086F76;
-	background-image: -moz-linear-gradient(top, #097880, #076268);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#097880), to(#076268));
-	background-image: -webkit-linear-gradient(top, #097880, #076268);
-	background-image: -o-linear-gradient(top, #097880, #076268);
-	background-image: linear-gradient(to bottom, #097880, #076268);
+	background-color: #009A3D;
+	background-image: -moz-linear-gradient(top, #009437, #297A29);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#009437), to(#297A29));
+	background-image: -webkit-linear-gradient(top, #009437, #297A29);
+	background-image: -o-linear-gradient(top, #009437, #297A29);
+	background-image: linear-gradient(to bottom, #009437, #297A29);
 	background-repeat: repeat-x;
 	color: #ffffff;
 }
@@ -141,12 +141,12 @@ header .navbar .nav li.dropdown > .dropdown-toggle .caret {
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-submenu:hover > a, .dropdown-submenu:focus > a {
 	color: #ffffff;
 	text-decoration: none;
-	background-color: #097880;
-	background-image: -moz-linear-gradient(top, #097880, #076268);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#097880), to(#076268));
-	background-image: -webkit-linear-gradient(top, #097880, #076268);
-	background-image: -o-linear-gradient(top, #097880, #076268);
-	background-image: linear-gradient(to bottom, #097880, #076268);
+	background-color: #009437;
+	background-image: -moz-linear-gradient(top, #009437, #297A29);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#009437), to(#297A29));
+	background-image: -webkit-linear-gradient(top, #009437, #297A29);
+	background-image: -o-linear-gradient(top, #009437, #297A29);
+	background-image: linear-gradient(to bottom, #009437, #297A29);
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff28241', endColorstr='#fff07229', GradientType=0);
 }
@@ -348,12 +348,12 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 }
 
 .nav-list > .active > a, .nav-list > .active > a:hover, .nav-list > .active > a:focus {
-	background-color: #086F76;
-	background-image: -moz-linear-gradient(top, #097880, #076268);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#097880), to(#076268));
-	background-image: -webkit-linear-gradient(top, #097880, #076268);
-	background-image: -o-linear-gradient(top, #097880, #076268);
-	background-image: linear-gradient(to bottom, #097880, #076268);
+	background-color: #009A3D;
+	background-image: -moz-linear-gradient(top, #009437, #297A29);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#009437), to(#297A29));
+	background-image: -webkit-linear-gradient(top, #009437, #297A29);
+	background-image: -o-linear-gradient(top, #009437, #297A29);
+	background-image: linear-gradient(to bottom, #009437, #297A29);
 	background-repeat: repeat-x;
 	color: #FFFFFF;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
@@ -362,12 +362,12 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 /* ----- NAVBAR ------- */
 
 .nav-pills > .active > a, .nav-pills > .active > a:hover, .nav-pills > .active > a:focus {
-	background-color: #086F76;
-	background-image: -moz-linear-gradient(top, #097880, #076268);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#097880), to(#076268));
-	background-image: -webkit-linear-gradient(top, #097880, #076268);
-	background-image: -o-linear-gradient(top, #097880, #076268);
-	background-image: linear-gradient(to bottom, #097880, #076268);
+	background-color: #009A3D;
+	background-image: -moz-linear-gradient(top, #009437, #297A29);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#009437), to(#297A29));
+	background-image: -webkit-linear-gradient(top, #009437, #297A29);
+	background-image: -o-linear-gradient(top, #009437, #297A29);
+	background-image: linear-gradient(to bottom, #009437, #297A29);
 	background-repeat: repeat-x;
 	color: #FFFFFF;
 }
@@ -388,7 +388,7 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 	-moz-border-left-colors: none;
 	-moz-border-right-colors: none;
 	-moz-border-top-colors: none;
-	border-color: #097880 #076268;
+	border-color: #009437 #297A29;
 	border-image: none;
 	border-radius: 5px 0px 5px 0px;
 	border-style: solid;
@@ -489,7 +489,7 @@ width:600px;
 
 
 .icon-defaultcolor{
-	color:#097880;
+	color:#009437;
 }
 
 .span3-5 {
