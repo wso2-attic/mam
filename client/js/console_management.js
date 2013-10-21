@@ -33,6 +33,7 @@ $(document).ready(function() {
 		var platform = $(this).data('platform');
 		var url = $(this).data('url');
 		var type = $(this).data('type');
+		var id = $(this).data('id');
 		$('.stakes > .nav li').each(function(){
 			if($(this).hasClass('active')){
 				var currentTab = $(this).children('a').attr('href');
@@ -47,9 +48,9 @@ $(document).ready(function() {
 						}else if($(this).children('a').hasClass('not-installed')){
 							
 							if(currentTab=='#roles'){
-								viewRolesNotInstalled(packageId,platform, type, url);
+								viewRolesNotInstalled(packageId,platform, type, url, id);
 							}else{
-								viewUsersNotInstalled(packageId,platform, type, url);
+								viewUsersNotInstalled(packageId,platform, type, url, id);
 							}
 						}
 					}
@@ -64,10 +65,11 @@ $(document).ready(function() {
 		var platform = selectedApp.data('platform');
 		var url = selectedApp.data('url');
 		var type = selectedApp.data('type');
+		var id = selectedApp.data('id');
 		if($(this).hasClass('install')){
 			viewUsersInstalled(packageId,platform);
 		}else if($(this).hasClass('not-installed')){
-			viewUsersNotInstalled(packageId,platform, type, url);
+			viewUsersNotInstalled(packageId,platform, type, url, id);
 		}
 	});
 	$('#roles .nav li a').off('click').click(function(){
@@ -76,14 +78,15 @@ $(document).ready(function() {
 		var platform = selectedApp.data('platform');
 		var url = selectedApp.data('url');
 		var type = selectedApp.data('type');
+		var id = selectedApp.data('id');
 		if($(this).hasClass('install')){
 			viewRolesInstalled(packageId,platform);
 		}else if($(this).hasClass('not-installed')){
-			viewRolesNotInstalled(packageId,platform, type, url);
+			viewRolesNotInstalled(packageId,platform, type, url,id);
 		}
 	});
 	
-	var viewRolesNotInstalled = function(packageId,platform, type, url){
+	var viewRolesNotInstalled = function(packageId,platform, type, url, id){
 		$.get('/mam/api/apps/roles/not-installed', {
 			'platform':platform,
 			'packageid':packageId
@@ -114,7 +117,8 @@ $(document).ready(function() {
 						'platform':platform,
 						'packageid':packageId,
 						'url': url,
-						'type': type
+						'type': type,
+						'id':id
 					}),function(){
 						$(".alert span").html('App will be installed to selected roles');
 						$(".alert").show();
@@ -232,7 +236,8 @@ $(document).ready(function() {
 						'platform':platform,
 						'packageid':packageId,
 						'url': url,
-						'type': type
+						'type': type,
+						'id':id
 					}),function(){
 						$(".alert span").html('App will be installed to selected roles');
 						$(".alert").show();

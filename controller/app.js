@@ -48,7 +48,7 @@ var navigation = function(role) {
         if(role == 'admin'){
 			var app_info = uiConfig();
             topNavigation = [
-                {name : "Configurations", link: app_info.MAM_UI_URI + "users/configuration", displayPage: "configuration", icon:"icon-wrench"},
+                // {name : "Configurations", link: app_info.MAM_UI_URI + "users/configuration", displayPage: "configuration", icon:"icon-wrench"},
                 {name : "Management"	, link: app_info.MAM_UI_URI + "console/management", displayPage: "management", icon:"icon-briefcase"},
             ];
             var configNavigation =	[
@@ -58,7 +58,7 @@ var navigation = function(role) {
             ];
         }else if(role == 'mdmadmin'){
             topNavigation = [
-                {name : "Configurations", link: app_info.MAM_UI_URI + "users/configuration", displayPage: "configuration", icon:"icon-wrench"},
+                // {name : "Configurations", link: app_info.MAM_UI_URI + "users/configuration", displayPage: "configuration", icon:"icon-wrench"},
                 {name : "Management"	, link: app_info.MAM_UI_URI + "devices/management", displayPage: "management", icon:"icon-briefcase"},
             ];
             var configNavigation =	[

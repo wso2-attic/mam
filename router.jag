@@ -1,5 +1,5 @@
 <%
-
+var Handle = require("/modules/handlebars.js").Handlebars;
 var current_user = session.get('mamConsoleUser');
 var current_user_roles =undefined;
 if(current_user!=undefined){
@@ -169,17 +169,17 @@ router.post('apps/user/uninstall', function(ctx){
 router.post('apps/users/install', function(ctx){
 	var storeModule = require('/modules/store.js').store;
 	var store = new storeModule(db);
+	var installParam = configs.archieve_location+"publisher"+ctx.url;
+	if(ctx.type == "Market"){
+		installParam = ctx.packageid;
+	}
 	var platform;
 	if (ctx.platform.toUpperCase() == 'ANDROID'){
 		platform = 1;
 	}else if (ctx.platform.toUpperCase() == 'IOS'){
 		platform = 2;
+		installParam= "https://192.168.1.157:9443/mam/api/apps/install/ios/"+ctx.id;
 	}
-	var installParam = configs.archieve_location+"publisher"+ctx.url;
-	if(ctx.type == "Market"){
-		installParam = ctx.packageid;
-	}
-	log.info(installParam);
 	var result = store.getUsersForAppNotInstalled({packageid: ctx.packageid, platform:platform});
 	var users = ctx.users;
 	for (var i = users.length - 1; i >= 0; i--){
@@ -198,7 +198,26 @@ router.post('apps/users/install', function(ctx){
 	};
 	response.status=200;
 });
-
+router.get("apps/install/ios/{id}", function(ctx){
+	var appName = ctx.id;
+	var app = getApp(appName);
+	//Assuming that the extension is of 3 letters
+	var iosManifest = compileTemplate("/template.hbs", {url:configs.archieve_location+"publisher"+app.attributes.overview_url, bundleid: app.attributes.overview_packageName, bundleversion: app.attributes.overview_bundleVersion,  appname:app.attributes.overview_name});
+	log.info(iosManifest);
+	response.contentType = "application/xml";
+	print(iosManifest);
+});
+var getApp = function(id){
+	var storeModule = require('/modules/store.js').store;
+	var store = new storeModule();
+	var apps =  store.getAppsFromStore();
+	for (var i = apps.length - 1; i >= 0; i--){
+		var app =apps[i]
+		if(app.id ==id){
+			return app;
+		}
+	};
+}
 router.get('test', function(){
 	var storeModule = require('/modules/store.js').store;
 	var store = new storeModule(db);
@@ -254,5 +273,16 @@ mvc.registerHelper('showActive', function(currentPage, page, options) {
   	return "";
   }
 });
+var compileTemplate = function(templatePath, context){
+	var template = Handle.compile(getResource(templatePath));
+	return template(context);
+}
+function getResource(name){
+	var f = new File(name);
+	f.open("r");
+	var cont = f.readAll();
+	f.close();
+	return cont;
+}
 mvc.route(request);
 %>

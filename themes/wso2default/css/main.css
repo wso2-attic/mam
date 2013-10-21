@@ -3,10 +3,10 @@
 	max-width: 900px;
 }
 .apps{
-	height: 270px;
+	height: 300px;
 }
 .apps .well{
-	height:120px;
+	height:150px;
 }
 .apps .filter-box {
 	height:40px;
@@ -14,6 +14,9 @@
 .app_box {
 	width:100px;
 	float: left;
+}
+.app_box p{
+	height:35px;
 }
 .app_box .icon{
 	width: 80px;

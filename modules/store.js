@@ -89,7 +89,23 @@ var store = (function () {
         deviceCountAll += parseInt(resultDeviceCount[0].device_count);
         return deviceCountAll;
 	};
-	
+	var removePrivateRole = function(roleList){
+	    var roles = new Array();
+	    for(var i = 0; i<roleList.length; i++){
+	        var prefix = '';
+	        try{
+	            prefix = roleList[i].substring(0,17);
+	        }catch(e){
+	        //   log.info('error occured while removing private role');
+	        }
+	        if(prefix == 'Internal/private_'){
+	            continue;
+	        }else{
+	            roles.push(roleList[i]);
+	        }
+	    }
+	    return roles;
+	}
 
     // prototype
     module.prototype = {
@@ -268,6 +284,7 @@ var store = (function () {
 					
 					if(userObj.roles!=undefined){
 						userObj.roles = parse(userObj.roles);
+						userObj.roles = removePrivateRole(userObj.roles);
 						for (var j = userObj.roles.length - 1; j >= 0; j--){
 							var role = userObj.roles[j];
 							log.info(role);
@@ -302,6 +319,7 @@ var store = (function () {
 					
 					if(userObj.roles!=undefined){
 						userObj.roles = parse(userObj.roles);
+						userObj.roles = removePrivateRole(userObj.roles);
 						for (var j = userObj.roles.length - 1; j >= 0; j--){
 							var role = userObj.roles[j];
 							log.info(role);
