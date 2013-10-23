@@ -1,32 +1,32 @@
-.container-middle{
+.container-middle {
 	margin: 0 auto;
 	max-width: 900px;
 }
-.apps{
+.apps {
 	height: 300px;
 }
-.apps .well{
-	height:150px;
+.apps .well {
+	height: 150px;
 }
 .apps .filter-box {
-	height:40px;
+	height: 40px;
 }
 .app_box {
-	width:100px;
+	width: 100px;
 	float: left;
 }
-.app_box p{
-	height:35px;
+.app_box p {
+	height: 35px;
 }
-.app_box .icon{
+.app_box .icon {
 	width: 80px;
 }
-.app_box a{
+.app_box a {
 	color: inherit;
 	text-decoration: none;
 }
-.app_box_unselected{
-	
+.app_box_unselected {
+
 }
 
 body {
@@ -279,19 +279,19 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 }
 
 .btn-orange {
-	background-color: hsl(188, 44%, 25%) !important;
+	background-color: hsl(110, 56%, 32%) !important;
 	background-repeat: repeat-x;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#317680", endColorstr="#23545b");
-	background-image: -khtml-gradient(linear, left top, left bottom, from(#317680), to(#23545b));
-	background-image: -moz-linear-gradient(top, #317680, #23545b);
-	background-image: -ms-linear-gradient(top, #317680, #23545b);
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #317680), color-stop(100%, #23545b));
-	background-image: -webkit-linear-gradient(top, #317680, #23545b);
-	background-image: -o-linear-gradient(top, #317680, #23545b);
-	background-image: linear-gradient(#317680, #23545b);
-	border-color: #23545b #23545b hsl(188, 44%, 22.5%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3c972a", endColorstr="#337f23");
+	background-image: -khtml-gradient(linear, left top, left bottom, from(#3c972a), to(#337f23));
+	background-image: -moz-linear-gradient(top, #3c972a, #337f23);
+	background-image: -ms-linear-gradient(top, #3c972a, #337f23);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #3c972a), color-stop(100%, #337f23));
+	background-image: -webkit-linear-gradient(top, #3c972a, #337f23);
+	background-image: -o-linear-gradient(top, #3c972a, #337f23);
+	background-image: linear-gradient(#3c972a, #337f23);
+	border-color: #337f23 #337f23 hsl(110, 56%, 30.5%);
 	color: #fff !important;
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.16);
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.09);
 	-webkit-font-smoothing: antialiased;
 }
 
@@ -474,47 +474,25 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 	padding-right: 10px;
 }
 
-
-
-
-
-
-
-
-.multiple-selectbox{
-width:600px;
+.multiple-selectbox {
+	width: 600px;
 }
 
-
-.parsley-error-list{
-    color: #b94a48 !important;     
+.parsley-error-list {
+	color: #b94a48 !important;
 }
 
-
-.icon-defaultcolor{
-	color:#009437;
+.icon-defaultcolor {
+	color: #009437;
 }
 
 .span3-5 {
-    width: 350px;
+	width: 350px;
 }
-
-
-
-
-
-
-
-
-
-
 
 /****************************************
  * ALS
  ***************************************/
-
-
-
 
 .als-container {
 	position: relative;
@@ -558,9 +536,38 @@ width:600px;
 /***********************************************
  * prev, next: buttons styling
  **********************************************/
- 
+
 .als-prev, .als-next {
 	position: absolute;
 	cursor: pointer;
 	clear: both;
+}
+
+
+.als-prev, .als-next {
+	position: absolute;
+	cursor: pointer;
+	clear: both;
+}
+
+
+
+
+.operation-filter{
+	margin-left:55px;
+}
+
+
+.offset1-5 {
+    margin-left: 180px;
+}	
+
+
+.btn-config{
+	margin-right: 40px;
+}
+
+
+.span1 {
+    margin-left: 10px;
 }
