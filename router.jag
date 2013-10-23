@@ -117,7 +117,7 @@ router.post('apps/roles/install', function(ctx){
 	}else if (ctx.platform.toUpperCase() == 'IOS'){
 		platform = 2;
 	}
-	var installParam = configs.archieve_location+"publisher"+ctx.url;
+	var installParam = configs.archieve_location+ctx.url;
 	if(ctx.type == "Market"){
 		installParam = ctx.packageid;
 	}
