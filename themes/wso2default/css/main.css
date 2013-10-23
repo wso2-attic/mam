@@ -542,3 +542,32 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 	cursor: pointer;
 	clear: both;
 }
+
+
+.als-prev, .als-next {
+	position: absolute;
+	cursor: pointer;
+	clear: both;
+}
+
+
+
+
+.operation-filter{
+	margin-left:55px;
+}
+
+
+.offset1-5 {
+    margin-left: 180px;
+}	
+
+
+.btn-config{
+	margin-right: 40px;
+}
+
+
+.span1 {
+    margin-left: 10px;
+}
