@@ -111,6 +111,7 @@ var context = function() {
     //    }
 	var defaultContext = {
 		ui: uiConfig(),
+		title: "MAM",
 		layout: '1-column',
 		navigation: navigation('admin'),
 		theme: theme(),
