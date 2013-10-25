@@ -5,7 +5,6 @@ var current_user_roles =undefined;
 if(current_user!=undefined){
 	current_user_roles = current_user.roles;
 }
-log.info('inside');
 
 var goose = require('modules/goose.js').goose;
 var router = new goose({
@@ -169,16 +168,16 @@ router.post('apps/user/uninstall', function(ctx){
 router.post('apps/users/install', function(ctx){
 	var storeModule = require('/modules/store.js').store;
 	var store = new storeModule(db);
-	var installParam = configs.archieve_location+"publisher"+ctx.url;
-	if(ctx.type == "Market"){
-		installParam = ctx.packageid;
-	}
+	var installParam = configs.archieve_location+"/publisher"+ctx.url;
 	var platform;
 	if (ctx.platform.toUpperCase() == 'ANDROID'){
 		platform = 1;
 	}else if (ctx.platform.toUpperCase() == 'IOS'){
 		platform = 2;
-		installParam= "https://192.168.1.157:9443/mam/api/apps/install/ios/"+ctx.id;
+		installParam= configs.archieve_location+"/mam/api/apps/install/ios/"+ctx.id;
+	}
+	if(ctx.type == "Market"){
+		installParam = ctx.packageid;
 	}
 	var result = store.getUsersForAppNotInstalled({packageid: ctx.packageid, platform:platform});
 	var users = ctx.users;
@@ -202,7 +201,7 @@ router.get("apps/install/ios/{id}", function(ctx){
 	var appName = ctx.id;
 	var app = getApp(appName);
 	//Assuming that the extension is of 3 letters
-	var iosManifest = compileTemplate("/template.hbs", {url:configs.archieve_location+"publisher"+app.attributes.overview_url, bundleid: app.attributes.overview_packageName, bundleversion: app.attributes.overview_bundleVersion,  appname:app.attributes.overview_name});
+	var iosManifest = compileTemplate("/template.hbs", {url:configs.archieve_location+"/publisher"+app.attributes.overview_url, bundleid: app.attributes.overview_packagename, bundleversion: app.attributes.overview_bundleversion,  appname:app.attributes.overview_name});
 	log.info(iosManifest);
 	response.contentType = "application/xml";
 	print(iosManifest);

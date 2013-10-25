@@ -1,0 +1,19 @@
+{
+	'tenanted': true,
+	"ssoConfiguration": {
+        "enabled": true,
+        "issuer": "mam",
+        "identityProviderURL": "%https.host%/sso/samlsso.jag",
+        "keyStorePassword": "wso2carbon",
+        "identityAlias": "wso2carbon",
+        "responseSigningEnabled": "true",
+        "storeAcs": "%https.host%/mam/acs",
+        "keyStoreName": "/repository/resources/security/wso2carbon.jks"
+    },
+	'publisher_location': "https://192.168.1.157:9443",
+	'archieve_location': "http://192.168.1.157:9763",
+	'store_location': "http://192.168.1.157:9763/store",
+	"mdm": {
+		"api" : "http://192.168.1.157:9763/mdm/api"
+	}
+}
