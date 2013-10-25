@@ -43,8 +43,8 @@ var mdm = (function () {
         constructor: module,
         install: function(type,installData, device){
 			var url =  configs.mdm.api+'/devices/'+device+'/AppInstall';
-			log.info("APP URL "+url);
-			var result = jsonPost(url, {type:type,identity:installData});
+			log.info("APP URL "+installData);
+			var result = jsonPost(url, {type:type,identity:''+installData+''});
 		},
 		installWebClip: function(installData, title, device){
 			var url =  configs.mdm.api+'/devices/'+device+'/operations/WEBCLIP';
