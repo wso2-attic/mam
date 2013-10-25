@@ -222,9 +222,9 @@ var store = (function () {
 			var package_identifier =  mutatePackageId(ctx);
 			var platform = ctx.platform;
 			var GET_APP_FEATURE_CODE = '502A';
-			var query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id  from notifications as out_table , devices where out_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and devices.platform_id=? and  `received_data` like ?;";
+			var query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id  from notifications as out_table , devices where out_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and "+platform+" and  `received_data` like ?;";
 			var returnResult = {};
-			query = db.query(query, platform, package_identifier);
+			query = db.query(query, package_identifier);
 			for (var i = query.length - 1; i >= 0; i--){
 				var result = query[i];
 				var userObj = user.getUser({userid:result.user_id});
@@ -250,9 +250,9 @@ var store = (function () {
 			var package_identifier =   mutatePackageId(ctx);
 			var platform = ctx.platform;
 			var GET_APP_FEATURE_CODE = '502A';
-			var query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id  from notifications as out_table , devices where out_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and devices.platform_id=? and  `received_data` not like ?;";
+			var query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id  from notifications as out_table , devices where out_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and "+platform+" and  `received_data` not like ?;";
 			var returnResult = {};
-			query = db.query(query, platform, package_identifier);
+			query = db.query(query, package_identifier);
 			for (var i = query.length - 1; i >= 0; i--){
 				var result = query[i];
 				var userObj = user.getUser({userid:result.user_id});
@@ -278,9 +278,11 @@ var store = (function () {
 			var package_identifier = mutatePackageId(ctx);
 			var platform = ctx.platform;
 			var GET_APP_FEATURE_CODE = '502A';
-			var query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id  from notifications as out_table , devices where out_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and devices.platform_id=? and  `received_data` like ?;";
+			var query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id  from notifications as out_table , devices where out_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and "+platform+"  and  `received_data` like ?;";
 			var returnResult = {};
-			query = db.query(query, platform, package_identifier);
+			log.info(package_identifier);
+			log.info(query);
+			query = db.query(query, package_identifier);
 			for (var i = query.length - 1; i >= 0; i--){
 				var result = query[i];
 				var userObj = user.getUser({userid:result.user_id});
@@ -313,10 +315,10 @@ var store = (function () {
 			var package_identifier =  mutatePackageId(ctx);
 			var platform = ctx.platform;
 			var GET_APP_FEATURE_CODE = '502A';
-			var query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id  from notifications as out_table , devices where out_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and devices.platform_id=? and  `received_data` not like ?;";
+			var query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id  from notifications as out_table , devices where out_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and "+platform+"  and  `received_data` not like ?;";
 			var returnResult = {};
 			log.info(query);
-			query = db.query(query, platform, package_identifier);
+			query = db.query(query, package_identifier);
 			
 			for (var i = query.length - 1; i >= 0; i--){
 				var result = query[i];

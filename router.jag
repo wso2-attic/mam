@@ -25,9 +25,9 @@ router.get('apps/roles/installed', function(ctx){
 	var store = new storeModule(db);
 	var platform;
 	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 1;
+		platform = 'devices.platform_id=1';
 	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = 2;
+		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
 	}
 	var result = store.getRolesForAppInstalled({packageid: ctx.packageid, platform:platform});
 	response.content = result;
@@ -40,9 +40,9 @@ router.get('apps/roles/not-installed', function(ctx){
 	var store = new storeModule(db);
 	var platform;
 	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 1;
+		platform = 'devices.platform_id=1';
 	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = 2;
+		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
 	}
 	var result = store.getRolesForAppNotInstalled({packageid: ctx.packageid, platform:platform});
 	response.content = result;
@@ -55,9 +55,9 @@ router.get('apps/users/installed', function(ctx){
 	var store = new storeModule(db);
 	var platform;
 	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 1;
+		platform = 'devices.platform_id=1';
 	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = 2;
+		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
 	}
 	var result = store.getUsersForAppInstalled({packageid: ctx.packageid, platform:platform});
 	response.content = result;
@@ -70,9 +70,9 @@ router.get('apps/users/not-installed', function(ctx){
 	var store = new storeModule(db);
 	var platform;
 	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 1;
+		platform = 'devices.platform_id=1';
 	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = 2;
+		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
 	}
 	var result = store.getUsersForAppNotInstalled({packageid: ctx.packageid, platform:platform});
 	response.content = result;
@@ -85,9 +85,9 @@ router.post('apps/roles/uninstall', function(ctx){
 	var store = new storeModule(db);
 	var platform;
 	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 1;
+		platform = 'devices.platform_id=1';
 	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = 2;
+		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
 	}
 	var result = store.getRolesForAppInstalled({packageid: ctx.packageid, platform:platform});
 	var roles = ctx.roles;
@@ -111,12 +111,13 @@ router.post('apps/roles/install', function(ctx){
 	var storeModule = require('/modules/store.js').store;
 	var store = new storeModule(db);
 	var platform;
-	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 1;
-	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = 2;
-	}
 	var installParam = configs.archieve_location+ctx.url;
+	if (ctx.platform.toUpperCase() == 'ANDROID'){
+		platform = 'devices.platform_id=1';
+	}else if (ctx.platform.toUpperCase() == 'IOS'){
+		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
+		installParam = configs.archieve_location+"/mam/api/apps/install/ios/"+ctx.id;
+	}
 	if(ctx.type == "Market"){
 		installParam = ctx.packageid;
 	}
@@ -144,9 +145,9 @@ router.post('apps/user/uninstall', function(ctx){
 	var store = new storeModule(db);
 	var platform;
 	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 1;
+		platform = 'devices.platform_id=1';
 	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = 2;
+		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
 	}
 	var result = store.getUsersForAppInstalled({packageid: ctx.packageid, platform:platform});
 	var users = ctx.users;
@@ -171,9 +172,9 @@ router.post('apps/users/install', function(ctx){
 	var installParam = configs.archieve_location+"/publisher"+ctx.url;
 	var platform;
 	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 1;
+		platform = 'devices.platform_id=1';
 	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = 2;
+		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
 		installParam= configs.archieve_location+"/mam/api/apps/install/ios/"+ctx.id;
 	}
 	if(ctx.type == "Market"){
@@ -201,7 +202,7 @@ router.get("apps/install/ios/{id}", function(ctx){
 	var appName = ctx.id;
 	var app = getApp(appName);
 	//Assuming that the extension is of 3 letters
-	var iosManifest = compileTemplate("/template.hbs", {url:configs.archieve_location+"/publisher"+app.attributes.overview_url, bundleid: app.attributes.overview_packagename, bundleversion: app.attributes.overview_bundleversion,  appname:app.attributes.overview_name});
+		var iosManifest = compileTemplate("/template.hbs", {url:configs.archieve_location+""+app.attributes.overview_url, bundleid: 'com.wso2mobile.mobile', bundleversion: app.attributes.overview_bundleversion,  appname:app.attributes.overview_name});
 	log.info(iosManifest);
 	response.contentType = "application/xml";
 	print(iosManifest);
