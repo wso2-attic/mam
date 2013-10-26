@@ -204,7 +204,7 @@ $(document).ready(function() {
 			});
 		});
 	};
-	var viewUsersNotInstalled = function(packageId,platform, type, url){
+	var viewUsersNotInstalled = function(packageId,platform, type, url,id){
 		
 		$.get('/mam/api/apps/users/not-installed', {
 			'platform':platform,

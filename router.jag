@@ -140,7 +140,7 @@ router.post('apps/roles/install', function(ctx){
 	};
 	response.status=200;
 });
-router.post('apps/user/uninstall', function(ctx){
+router.post('apps/users/uninstall', function(ctx){
 	var storeModule = require('/modules/store.js').store;
 	var store = new storeModule(db);
 	var platform;
@@ -202,7 +202,7 @@ router.get("apps/install/ios/{id}", function(ctx){
 	var appName = ctx.id;
 	var app = getApp(appName);
 	//Assuming that the extension is of 3 letters
-		var iosManifest = compileTemplate("/template.hbs", {url:configs.archieve_location+""+app.attributes.overview_url, bundleid: 'com.wso2mobile.mobile', bundleversion: app.attributes.overview_bundleversion,  appname:app.attributes.overview_name});
+		var iosManifest = compileTemplate("/template.hbs", {url:configs.archieve_location+""+app.attributes.overview_url, bundleid: app.attributes.overview_packagename, bundleversion: app.attributes.overview_bundleversion,  appname:app.attributes.overview_name});
 	log.info(iosManifest);
 	response.contentType = "application/xml";
 	print(iosManifest);
