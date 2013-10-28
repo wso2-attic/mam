@@ -99,7 +99,7 @@ $("#btn-add").click(function() {
 		url : getServiceURLs("policiesCRUD", ""),
 		type : "POST",
 		async : "false",
-		data: JSON.stringify({policyData: policyData, policyName: policyName, policyType: policyType, category: "1"}),		
+		data: JSON.stringify({policyData: policyData, policyName: policyName, policyType: policyType, category: "2"}),		
 		contentType : "application/json",
      	dataType : "json",
      	statusCode: {

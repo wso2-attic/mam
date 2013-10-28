@@ -62,7 +62,7 @@ getServiceURLs = function(item){
 
 	});
 
-	var serverURL = context().serverURL;	
+	var serverURL = "";	
 	var urls = apiConfig.APIS;		
 	arguments[0] = urls[item];	
 	if(tenantId){
