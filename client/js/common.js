@@ -4,7 +4,6 @@ var uiConfig = getUIConfig();
 
 function getAppConfig(){
 	var appConfig = loadTextFileAjaxSync("/mam/config/config.json", "application/json");	
-	alert(appConfig);
 	return JSON.parse(appConfig);
 }
 
