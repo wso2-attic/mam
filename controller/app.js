@@ -84,31 +84,31 @@ var navigation = function(role) {
 */
 var context = function() {
 
-    // var contextData = {};
-    //    var currentUser = session.get("mamConsoleUser");  
-    //    if(currentUser){
-    //        if(currentUser.isAdmin){
-    //            contextData.user = {
-    //                name : "Admin",
-    //                role : "admin"
-    //            };
-    //        }else if(currentUser.isMDMAdmin){
-    //            contextData.user = {
-    //                name : "MDM Admin",
-    //                role : "mdmadmin"
-    //            };
-    //        }else{
-    //            contextData.user = {
-    //                name : "User",
-    //                role : "user"
-    //            };
-    //        }
-    //    }else{
-    //        contextData.user = {
-    //            name : "Guest",
-    //            role : "guest"
-    //        };
-    //    }
+    var contextData = {};
+       var currentUser = session.get("mamConsoleUser");  
+       if(currentUser){
+           if(currentUser.isAdmin){
+               contextData.user = {
+                   name : "Admin",
+                   role : "admin"
+               };
+           }else if(currentUser.isMDMAdmin){
+               contextData.user = {
+                   name : "MDM Admin",
+                   role : "mdmadmin"
+               };
+           }else{
+               contextData.user = {
+                   name : "User",
+                   role : "user"
+               };
+           }
+       }else{
+           contextData.user = {
+               name : "Guest",
+               role : "guest"
+           };
+       }
 	var defaultContext = {
 		ui: uiConfig(),
 		title: "MAM",
@@ -116,6 +116,7 @@ var context = function() {
 		navigation: navigation('admin'),
 		theme: theme(),
 		config: config(),
+		contextData : contextData,
 		userLogin : session.get("mamConsoleUserLogin"),
         currentUser : session.get("mamConsoleUser"),
 		resourcePath: "../themes/" + theme() + "/img/"

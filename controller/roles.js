@@ -43,9 +43,9 @@ users = function(appController){
 	context = appController.context();
 	var role = request.getParameter('role');
 	if(!role){
-		role = session.get('mdmConsoleSelectedRole');
+		role = session.get('mamConsoleSelectedRole');
 	}
-	session.put('mdmConsoleSelectedRole', role)
+	session.put('mamConsoleSelectedRole', role)
 	try{
 		var users = group.getUsersOfGroup({'groupid':role});
 	}catch(e){
@@ -94,7 +94,7 @@ add = function(appController){
 		var users = [];
 	}
 	log.info("sdfsd");
-	log.info(session.get("mdmConsoleUser"));
+	log.info(session.get("mamConsoleUser"));
 	
 	context.title = context.title + " | Add Group";
 	context.page = "configuration";
@@ -102,7 +102,7 @@ add = function(appController){
 	context.data = {
 		configOption : "roles",
 		users: users,
-		tenantId:session.get("mdmConsoleUser").tenantId
+		tenantId:session.get("mamConsoleUser").tenantId
 	}
 	return context;
 }
@@ -122,7 +122,7 @@ assign_users = function(appController){
 
 
 	log.info("sdfsd");
-	log.info(session.get("mdmConsoleUser"));
+	log.info(session.get("mamConsoleUser"));
 	context = appController.context();
 	context.title = context.title + " | Assign Users to group";
 	context.page = "configuration";
@@ -130,7 +130,7 @@ assign_users = function(appController){
 	context.data = {
 		configOption : "roles",
 		users: users,
-		tenantId:session.get("mdmConsoleUser").tenantId,
+		tenantId:session.get("mamConsoleUser").tenantId,
 		groupId: groupId
 	}
 	return context;
@@ -148,7 +148,7 @@ assign_permissions = function(appController){
 	context.jsFile= "roles/assign_permissions.js"
 	context.data = {
 		configOption : "roles",		
-		tenantId:session.get("mdmConsoleUser").tenantId,
+		tenantId:session.get("mamConsoleUser").tenantId,
 		groupId: groupId
 	}
 	return context;

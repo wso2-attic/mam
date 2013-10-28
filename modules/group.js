@@ -102,7 +102,7 @@ var group = (function () {
             var type = ctx.type;
 			var um = userManager(common.getTenantID());
             var allRoles = common.removePrivateRole(um.allRoles());
-            var removeRoles = new Array("Internal/everyone", "portal", "wso2.anonymous.role", "reviewer");
+            var removeRoles = new Array("Internal/everyone", "portal", "wso2.anonymous.role", "reviewer", "mdmadmin");
             var roles = common.removeNecessaryElements(allRoles, removeRoles);
             return roles;
 		},
@@ -126,7 +126,7 @@ var group = (function () {
             var roles = this.getAllGroups({});
             for(var i=0;i<roles.length;i++){
                     var obj = {};
-                    if(roles[i] == 'admin'||roles[i] == 'mdmadmin'){
+                    if(roles[i] == 'admin'||roles[i] == 'mamadmin'){
                         obj.name = roles[i];
                         obj.type = 'administrator';
                         if(type == 'admin'){
@@ -141,7 +141,6 @@ var group = (function () {
                         obj.type = 'user';
                         newRoles.push(obj);
                     }
-
             }
             return newRoles;
         },
@@ -151,7 +150,7 @@ var group = (function () {
 			if(tenantId){
 				var um = userManager(common.getTenantID());
 				var allUsers = um.getUserListOfRole(ctx.groupid);
-                var removeUsers = new Array("wso2.anonymous.user","admin");
+                var removeUsers = new Array("wso2.anonymous.user","admin", "mdmadmin");
                 var users = common.removeNecessaryElements(allUsers,removeUsers);
 				for(var i = 0; i < users.length; i++) {
 					var user = um.getUser(users[i]);

@@ -3,17 +3,17 @@ var apiConfig = getApiConfig();
 var uiConfig = getUIConfig();
 
 function getAppConfig(){
-	var appConfig = loadTextFileAjaxSync("/mdm/config/config.json", "application/json");	
+	var appConfig = loadTextFileAjaxSync("/mam/config/config.json", "application/json");	
 	return JSON.parse(appConfig);
 }
 
 function getUIConfig(){
-	var uiConfig = loadTextFileAjaxSync("/mdm/config/ui.json", "application/json");	
+	var uiConfig = loadTextFileAjaxSync("/mam/config/ui.json", "application/json");	
 	return JSON.parse(uiConfig);
 }
 
 function getApiConfig(){	
-	var apiConfig = loadTextFileAjaxSync("/mdm/config/apis.json", "application/json");
+	var apiConfig = loadTextFileAjaxSync("/mam/config/apis.json", "application/json");
 	return JSON.parse(apiConfig);
 }
 
@@ -56,7 +56,7 @@ function loadTextFileAjaxSync(filePath, mimeType)
 getServiceURLs = function(item){	
 	
 	var tenantId = null;
-	$.get('/mdm/console/info').done(function(data) {
+	$.get('/mam/console/info').done(function(data) {
 			tenantId = JSON.parse(data).tenantId;
 		}).fail(function() {
 

@@ -7,7 +7,6 @@ var group = new groupModule(db);
 
 configuration = function(appController) {
 	context = appController.context();
-	
 	try {
         var users = user.getUsersByType({type:context.contextData.user.role});
         log.info("Users >>>>>>>"+stringify(users));
@@ -99,7 +98,7 @@ assign_groups = function(appController) {
 	context.data = {
 		configOption : "policies",
 		groups : groups,
-		tenantId : session.get("mdmConsoleUser").tenantId,
+		tenantId : session.get("mamConsoleUser").tenantId,
 		username : username
 
 	};
