@@ -214,7 +214,9 @@ var store = (function () {
 			var configs = require('/config/config.json');
 			var url  = configs.store_location+"/apis/assets/mobileapp";
 			var data = get(url, {});
+			log.info("DATA>>>>>>>>>>>>>>>>>>>>>>>>>>>" + stringify(data));
 			data =parse(data.data);
+			
 			return data;
 		},
 		//Send platform as int - 
