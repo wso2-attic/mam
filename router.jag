@@ -225,6 +225,14 @@ router.get('test', function(){
 	response.content = result;
 });
 
+var userRouter = require('api/userRouter.js').user;
+var userRouterInstance = new userRouter(db,router);
+
+var groupRouter = require('api/groupRouter.js').group;
+var groupRouterInstance = new groupRouter(db,router);
+
+
+
 var absolute = require ('modules/absolute.js').mvc;
 var mvc = new absolute({
 	SERVER_URL:"/mam/",
