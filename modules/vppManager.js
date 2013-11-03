@@ -60,11 +60,9 @@ var vppManager = (function () {
 		/* 
 			ctx - {uuid, deviceId, tenantId, userId}
 		*/
-        appInstall: function(ctx) {
-			var uuid = ctx.uuid;
-			var deviceId = ctx.deviceid;
+        getCoupon: function(uuid, deviceId) {
 			var tenantId = common.getTenantID();
-			var userId = ctx.userId;
+			var userId = db.query("select user_id from devices where id=? and tenant_id=?", deviceId, tenantId)[0].user_id;
 			var query = "select * from vpp_coupons where uuid=? and tenantId=? and status='F'";
 			var result = db.query(query, uuid, tenantId);
 			if(result.length>0){
@@ -72,10 +70,9 @@ var vppManager = (function () {
 				query = "update vpp_coupons set user=?, deviceId=?, status='E' where coupon=? and uuid=? and tenantId=?";
 				//set the status as engaged
 				db.query(query,userId, deviceId, couponRecord.coupon, uuid, tenantId);
-				//Call the iOS code
-				mdm.install(ctx.type, ctx.installParam, ctx.deviceid, couponRecord.coupon);	
+				return coupon;
 			}else{
-				throw "Error: No free coupon code found";
+				throw new Error("Error: No free coupon code found");
 			}
         },
 		installCallback: function(ctx){

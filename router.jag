@@ -19,79 +19,76 @@ var configs = require('config/config.json');
 //For VPP
 var vppManagerModule = require('modules/vppManager.js').vppManager;
 var vppManager = new vppManagerModule(db);
+
+var storeModule = require('/modules/store.js').store;
+var store = new storeModule(db);
+
+var getApp = function(id){
+	var app =  store.getAppFromStore(id);
+	return app;
+}
+var buildInstallParam = function(ctx){
+	var installParam = configs.archieve_location+ctx.url;
+	if (ctx.platform.toUpperCase() == 'IOS'){
+		installParam = configs.archieve_location+"/mam/api/apps/install/ios/"+ctx.id;
+	}
+	if(ctx.type == "Market"){
+		installParam = ctx.packageid;
+	}
+	return installParam;
+}
+//Inserts a VPP code into the payload if the app type is VPP
+var injectVPPCode = function(appid, installData){
+	if(installData.type=="VPP"){
+		installData.coupon = vppManager.getCoupon(appid, installData.deviceid, userId);
+	}
+	return installData;
+}
+
+var compileTemplate = function(templatePath, context){
+	var template = Handle.compile(getResource(templatePath));
+	return template(context);
+}
+function getResource(name){
+	var f = new File(name);
+	f.open("r");
+	var cont = f.readAll();
+	f.close();
+	return cont;
+}
 /* 
  Sample call - https://localhost:9443/mam/api/apps/roles/installed?platform=iOS&packageid=com.naveenium.foursquare
 */
 router.get('apps/roles/installed', function(ctx){
-	var storeModule = require('/modules/store.js').store;
-	var store = new storeModule(db);
-	var platform;
-	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 'devices.platform_id=1';
-	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
-	}
-	var result = store.getRolesForAppInstalled({packageid: ctx.packageid, platform:platform});
+	var result = store.getRolesForAppInstalled(ctx.packageid, ctx.platform);
 	response.content = result;
 });
 /* 
  Sample call - https://localhost:9443/mam/api/apps/roles/not-installed?platform=iOS&packageid=com.naveenium.foursquare
 */
 router.get('apps/roles/not-installed', function(ctx){
-	var storeModule = require('/modules/store.js').store;
-	var store = new storeModule(db);
-	var platform;
-	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 'devices.platform_id=1';
-	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
-	}
-	var result = store.getRolesForAppNotInstalled({packageid: ctx.packageid, platform:platform});
+	var result = store.getRolesForAppNotInstalled(ctx.packageid, ctx.platform);
 	response.content = result;
 });
 /* 
  Sample call - https://localhost:9443/mam/api/apps/roles/installed?platform=iOS&packageid=com.naveenium.foursquare
 */
 router.get('apps/users/installed', function(ctx){
-	var storeModule = require('/modules/store.js').store;
-	var store = new storeModule(db);
-	var platform;
-	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 'devices.platform_id=1';
-	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
-	}
-	var result = store.getUsersForAppInstalled({packageid: ctx.packageid, platform:platform});
+	var result = store.getUsersForAppInstalled(ctx.packageid, ctx.platform);
 	response.content = result;
 });
 /* 
  Sample call - https://localhost:9443/mam/api/apps/roles/not-installed?platform=iOS&packageid=com.naveenium.foursquare
 */
 router.get('apps/users/not-installed', function(ctx){
-	var storeModule = require('/modules/store.js').store;
-	var store = new storeModule(db);
-	var platform;
-	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 'devices.platform_id=1';
-	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
-	}
-	var result = store.getUsersForAppNotInstalled({packageid: ctx.packageid, platform:platform});
+	var result = store.getUsersForAppNotInstalled(ctx.packageid, ctx.platform);
 	response.content = result;
 });
 
 
 
 router.post('apps/roles/uninstall', function(ctx){
-	var storeModule = require('/modules/store.js').store;
-	var store = new storeModule(db);
-	var platform;
-	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 'devices.platform_id=1';
-	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
-	}
-	var result = store.getRolesForAppInstalled({packageid: ctx.packageid, platform:platform});
+	var result = store.getRolesForAppInstalled(ctx.packageid, ctx.platform);
 	var roles = ctx.roles;
 	var uninstallPayload = [];
 	for (var i = roles.length - 1; i >= 0; i--){
@@ -102,7 +99,8 @@ router.post('apps/roles/uninstall', function(ctx){
 				var device = row.devices[j];
 				uninstallPayload.push({
 					deviceid : device,
-					packageId : ctx.packageid
+					packageId : ctx.packageid,
+					type: ctx.type
 				});
 				
 			};
@@ -112,94 +110,73 @@ router.post('apps/roles/uninstall', function(ctx){
 	response.status=200;
 });
 router.post('apps/roles/install', function(ctx){
-	var storeModule = require('/modules/store.js').store;
-	var store = new storeModule(db);
-	var platform;
-	var installParam = configs.archieve_location+ctx.url;
-	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 'devices.platform_id=1';
-	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
-		installParam = configs.archieve_location+"/mam/api/apps/install/ios/"+ctx.id;
-	}
-	if(ctx.type == "Market"){
-		installParam = ctx.packageid;
-	}
-	log.info(installParam);
-	var result = store.getRolesForAppNotInstalled({packageid: ctx.packageid, platform:platform});
-	var roles = ctx.roles;
-	for (var i = roles.length - 1; i >= 0; i--){
-		var role = roles[i];
+	var installParam = buildInstallParam(ctx);
+	var installPayload = [];
+	var result = store.getRolesForAppNotInstalled(ctx.packageid, ctx.platform);
+	for (var i = ctx.roles.length - 1; i >= 0; i--){
+		var role = ctx.roles[i];
 		var row  = result[role];
 		if(row!=undefined){
 			for (var j = row.devices.length - 1; j >= 0; j--){
 				var device = row.devices[j];
-				store.installApp({
-					deviceid : device,
-					installParam : installParam,
-					type: ctx.type
-				});
+				try{
+					installPayload.push(injectVPPCode(ctx.id, {
+						deviceid : device,
+						identity : installParam,
+						type: ctx.type
+					}));
+				}catch(e){
+					log.error(e);
+				}
 			};
 		}
 	};
+	store.installApp(installPayload);
 	response.status=200;
 });
 router.post('apps/users/uninstall', function(ctx){
-	var storeModule = require('/modules/store.js').store;
-	var store = new storeModule(db);
-	var platform;
-	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 'devices.platform_id=1';
-	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
-	}
-	var result = store.getUsersForAppInstalled({packageid: ctx.packageid, platform:platform});
-	var users = ctx.users;
-	for (var i = users.length - 1; i >= 0; i--){
-		var user = users[i];
+	var result = store.getUsersForAppInstalled(ctx.packageid, ctx.platform);
+	var uninstallPayload = [];
+	for (var i =  ctx.users - 1; i >= 0; i--){
+		var user = ctx.users[i];
 		var row  = result[user];
 		if(row!=undefined){
 			for (var j = row.devices.length - 1; j >= 0; j--){
 				var device = row.devices[j];
-				store.uninstallApp({
+				uninstallPayload.push({
 					deviceid : device,
-					packageId : ctx.packageid
-				});
-			};
-		}
-	};
-	response.status=200;
-});
-router.post('apps/users/install', function(ctx){
-	var storeModule = require('/modules/store.js').store;
-	var store = new storeModule(db);
-	var installParam = configs.archieve_location+"/publisher"+ctx.url;
-	var platform;
-	if (ctx.platform.toUpperCase() == 'ANDROID'){
-		platform = 'devices.platform_id=1';
-	}else if (ctx.platform.toUpperCase() == 'IOS'){
-		platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
-		installParam= configs.archieve_location+"/mam/api/apps/install/ios/"+ctx.id;
-	}
-	if(ctx.type == "Market"){
-		installParam = ctx.packageid;
-	}
-	var result = store.getUsersForAppNotInstalled({packageid: ctx.packageid, platform:platform});
-	var users = ctx.users;
-	for (var i = users.length - 1; i >= 0; i--){
-		var user = users[i];
-		var row  = result[user];
-		if(row!=undefined){
-			for (var j = row.devices.length - 1; j >= 0; j--){
-				var device = row.devices[j];
-				store.installApp({
-					deviceid : device,
-					installParam : installParam,
+					packageId : ctx.packageid,
 					type: ctx.type
 				});
 			};
 		}
 	};
+	store.uninstallApp(uninstallPayload);
+	response.status=200;
+});
+router.post('apps/users/install', function(ctx){
+	var installParam = buildInstallParam(ctx);
+	var result = store.getUsersForAppNotInstalled(ctx.packageid, ctx.platform);
+	var installPayload = [];
+	for (var i = ctx.users.length - 1; i >= 0; i--){
+		var user = ctx.users[i];
+		var row  = result[user];
+		if(row!=undefined){
+			for (var j = row.devices.length - 1; j >= 0; j--){
+				var device = row.devices[j];
+				try{
+					installPayload.push(injectVPPCode(ctx.id, {
+						deviceid : device,
+						identity : installParam,
+						type: ctx.type
+					}));
+				}catch(e){
+					log.error(e);
+				}
+			};
+		}
+	};
+	store.installApp(installPayload,ctx.platform);
 	response.status=200;
 });
 
@@ -213,23 +190,14 @@ router.post("apps/vpp/callback", function(ctx){
 });
 
 router.get("apps/install/ios/{id}", function(ctx){
-	var appName = ctx.id;
-	var app = getApp(appName);
-	//Assuming that the extension is of 3 letters
-		var iosManifest = compileTemplate("/template.hbs", {url:configs.archieve_location+""+app.attributes.overview_url, bundleid: app.attributes.overview_packagename, bundleversion: app.attributes.overview_bundleversion,  appname:app.attributes.overview_name});
+	var app = getApp(ctx.id);
+	var iosManifest = compileTemplate("/template.hbs", {url:configs.archieve_location+""+app.attributes.overview_url, bundleid: app.attributes.overview_packagename, bundleversion: app.attributes.overview_bundleversion,  appname:app.attributes.overview_name});
 	log.info(iosManifest);
 	response.contentType = "application/xml";
 	print(iosManifest);
 });
-var getApp = function(id){
-	var storeModule = require('/modules/store.js').store;
-	var store = new storeModule();
-	var app =  store.getAppFromStore(id);
-	return app;
-}
+
 router.get('test', function(){
-	var storeModule = require('/modules/store.js').store;
-	var store = new storeModule(db);
 	var result = store.getUsersForAppInstalled({packageid:'com.naveenium.foursquare', platform:1});
 	response.content = result;
 });
@@ -249,57 +217,6 @@ var mvc = new absolute({
 	API:"api",
 	ROUTER: router
 });
-mvc.registerHelper('stringify', function(context) {
-var log = new Log();log.error("CONTEXT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+stringify(context));
-    return stringify(context);
-});
-mvc.registerHelper('compare', function(lvalue, rvalue, options) {
-
-    if (arguments.length < 3)
-        throw new Error("Handlerbars Helper 'compare' needs 2 parameters");
-
-    operator = options.hash.operator || "==";
-
-    var operators = {
-        '==':       function(l,r) { return l == r; },
-        '===':      function(l,r) { return l === r; },
-        '!=':       function(l,r) { return l != r; },
-        '<':        function(l,r) { return l < r; },
-        '>':        function(l,r) { return l > r; },
-        '<=':       function(l,r) { return l <= r; },
-        '>=':       function(l,r) { return l >= r; },
-        'typeof':   function(l,r) { return typeof l == r; }
-    }
-
-    if (!operators[operator])
-        throw new Error("Handlerbars Helper 'compare' doesn't know the operator "+operator);
-
-    var result = operators[operator](lvalue,rvalue);
-
-    if( result ) {
-        return options.fn(this);
-    } else {
-        return options.inverse(this);
-    }
-
-});
-mvc.registerHelper('showActive', function(currentPage, page, options) {
-  if(currentPage == page){
-  	return "active";
-  }else{
-  	return "";
-  }
-});
-var compileTemplate = function(templatePath, context){
-	var template = Handle.compile(getResource(templatePath));
-	return template(context);
-}
-function getResource(name){
-	var f = new File(name);
-	f.open("r");
-	var cont = f.readAll();
-	f.close();
-	return cont;
-}
+require('helpers.js');
 mvc.route(request);
 %>

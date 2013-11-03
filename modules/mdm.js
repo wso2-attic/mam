@@ -41,23 +41,21 @@ var mdm = (function () {
     // prototype
     module.prototype = {
         constructor: module,
-        install: function(type,installData, device){
+        install: function(payload, device){
 			var url =  configs.mdm.api+'/devices/'+device+'/AppInstall';
-			log.debug("APP URL "+installData);
-			var result = jsonPost(url, {type:type,identity:''+installData+''});
+			var result = jsonPost(url, payload);
 		},
-		installWebClip: function(installData, title, device){
-			var url =  configs.mdm.api+'/devices/'+device+'/operations/WEBCLIP';
-			var result = jsonPost(url, {url:installData, title:title});
-		},
-		installVpp: function(type,installData, device, coupon){
-			var url =  configs.mdm.api+'/devices/'+device+'/AppInstall';
-			log.debug("APP URL "+installData);
-			var result = jsonPost(url, {type:type,identity:''+installData+'', coupon: coupon});
-		},
-		uninstall: function(uninstallData,device){
+		uninstall: function(payload, device){
 			var url = configs.mdm.api+'/devices/'+device+'/AppUNInstall';
-			var result = jsonPost(url, {"identity":uninstallData});
+			var result = jsonPost(url, payload);
+		},
+		installBulk: function(data){
+			var url =  configs.mdm.api+'/devices/AppInstall';
+			var result = jsonPost(url, data);
+		},
+		uninstallBulk: function(data){
+			var url =  configs.mdm.api+'/devices/AppUNInstall';
+			var result = jsonPost(url, data);
 		}
     };
     // return module
