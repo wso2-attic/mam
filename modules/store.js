@@ -16,6 +16,10 @@ var store = (function () {
 
 	var mdmModule = require('mdm.js').mdm;
     var mdm = new mdmModule();
+
+	var vppManagerModule = require('modules/vppManager.js').vppManager;
+	var vppManager = new vppManagerModule(db);
+	
     function mergeRecursive(obj1, obj2) {
         for (var p in obj2) {
             try {
@@ -214,10 +218,15 @@ var store = (function () {
 			var configs = require('/config/config.json');
 			var url  = configs.store_location+"/apis/assets/mobileapp";
 			var data = get(url, {});
-			log.info("DATA>>>>>>>>>>>>>>>>>>>>>>>>>>>" + stringify(data));
 			data =parse(data.data);
-			
 			return data;
+		},
+		getAppFromStore : function(id){
+			var configs = require('/config/config.json');
+			var url  = configs.store_location+"/apis/asset/mobileapp?id="+id;
+			var data = get(url, {});
+			data =parse(data.data);
+			return data;	
 		},
 		//Send platform as int - 
 		getUsersForAppInstalled : function(ctx){
@@ -357,7 +366,11 @@ var store = (function () {
 			mdm.uninstall(packageId, deviceid);	
 		},
 		installApp: function(ctx){
-			mdm.install(ctx.type,ctx.installParam, ctx.deviceid);	
+			if(ctx.type=="VPP"){
+				vppManager.appInstall(ctx);
+			}else{
+				mdm.install(ctx.type,ctx.installParam, ctx.deviceid);
+			}
 		},
 		getAllAppFromDevice: function(ctx){
 			var deviceId =  ctx.deviceId;

@@ -43,12 +43,17 @@ var mdm = (function () {
         constructor: module,
         install: function(type,installData, device){
 			var url =  configs.mdm.api+'/devices/'+device+'/AppInstall';
-			log.info("APP URL "+installData);
+			log.debug("APP URL "+installData);
 			var result = jsonPost(url, {type:type,identity:''+installData+''});
 		},
 		installWebClip: function(installData, title, device){
 			var url =  configs.mdm.api+'/devices/'+device+'/operations/WEBCLIP';
 			var result = jsonPost(url, {url:installData, title:title});
+		},
+		installVpp: function(type,installData, device, coupon){
+			var url =  configs.mdm.api+'/devices/'+device+'/AppInstall';
+			log.debug("APP URL "+installData);
+			var result = jsonPost(url, {type:type,identity:''+installData+'', coupon: coupon});
 		},
 		uninstall: function(uninstallData,device){
 			var url = configs.mdm.api+'/devices/'+device+'/AppUNInstall';
