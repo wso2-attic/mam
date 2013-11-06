@@ -1,7 +1,6 @@
 var TENANT_CONFIGS = 'tenant.configs';
 var USER_MANAGER = 'user.manager';
 
-MyError.prototype = new Error();
 
 var vppManager = (function () {
     var log = new Log();
@@ -78,6 +77,7 @@ var vppManager = (function () {
 		installCallback: function(ctx){
 			var coupon = ctx.coupon;
 			var deviceId = ctx.deviceId;
+			var tenantId = common.getTenantID();
 			var query = "select * from vpp_coupons where uuid=? and tenantId=? and status='E'";
 			var result = db.query(query, uuid, tenantId);
 			if(result.length>0){

@@ -100,6 +100,7 @@ router.post('apps/roles/uninstall', function(ctx){
 				uninstallPayload.push({
 					deviceid : device,
 					packageId : ctx.packageid,
+					platform_id: ctx.platform,
 					type: ctx.type
 				});
 				
@@ -123,6 +124,7 @@ router.post('apps/roles/install', function(ctx){
 					installPayload.push(injectVPPCode(ctx.id, {
 						deviceid : device,
 						identity : installParam,
+						platform_id: ctx.platform,
 						type: ctx.type
 					}));
 				}catch(e){
@@ -145,6 +147,7 @@ router.post('apps/users/uninstall', function(ctx){
 				var device = row.devices[j];
 				uninstallPayload.push({
 					deviceid : device,
+					platform_id: ctx.platform,
 					packageId : ctx.packageid,
 					type: ctx.type
 				});
@@ -168,6 +171,7 @@ router.post('apps/users/install', function(ctx){
 					installPayload.push(injectVPPCode(ctx.id, {
 						deviceid : device,
 						identity : installParam,
+						platform_id: ctx.platform,
 						type: ctx.type
 					}));
 				}catch(e){

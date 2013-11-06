@@ -6,6 +6,8 @@ var group = new groupModule(db);
 var userModule = require('/modules/user.js').user;
 var user = new userModule(db);
 
+var storeModule = require('/modules/store.js').store;
+var store = new storeModule(db);
 
 
 configuration = function(appController){	
@@ -164,7 +166,7 @@ add = function(appController){
 	}
 	
 	try{
-		var installedApps = mam.getInstallAppList({});
+		var installedApps =  store.getAppsFromStoreFormatted();
 	}catch(e){
 		var installedApps = [];
 	}

@@ -9,6 +9,7 @@ var store = (function () {
     var db;
     var module = function (dbs) {
         db = dbs;
+		log.info(db);
         //mergeRecursive(configs, conf);
     };
     var userModule = require('user.js').user;
@@ -16,7 +17,8 @@ var store = (function () {
 
 	var mdmModule = require('mdm.js').mdm;
     var mdm = new mdmModule();
-
+	var configsFile = require('config/config.json');
+	
 	var vppManagerModule = require('modules/vppManager.js').vppManager;
 	var vppManager = new vppManagerModule(db);
 	
@@ -70,7 +72,7 @@ var store = (function () {
 	        return "-1234";
 		}
 	}
-	var getAllDeviceCountForGroup = function(role){
+	var getAllDeviceCountForGroup = function(role, platform){
 		var um = userManager(getTenantID());
 		if(role!='Internal/everyone'){
 			var userList = um.getUserListOfRole(role);
@@ -81,7 +83,7 @@ var store = (function () {
 	            deviceCountAll += parseInt(resultDeviceCount[0].device_count);
 	        }
 		}else{
-			deviceCountAll = db.query("SELECT COUNT(id) AS device_count FROM devices WHERE tenant_id = ? and "+buildPlatformString(platform),
+			deviceCountAll = db.query("SELECT COUNT(id) AS device_count FROM devices WHERE tenant_id = ? and "+ buildPlatformString(platform),
 	                 getTenantID())[0].device_count;
 			log.info(deviceCountAll);
 		}
@@ -111,14 +113,17 @@ var store = (function () {
 	    }
 	    return roles;
 	}
-	var buildPlatformString = function(ctx){
-		var platform;
-		if (ctx.platform.toUpperCase() == 'ANDROID'){
+	var buildPlatformString = function(platform){
+		var platform = platform.toUpperCase();
+		if ( platform== 'ANDROID'){
 			platform = 'devices.platform_id=1';
-		}else if (ctx.platform.toUpperCase() == 'IOS'){
+		}else if (platform == 'IOS'){
 			platform = '(devices.platform_id=2 or devices.platform_id=3 or devices.platform_id=4)';
 		}
 		return platform;
+	}
+	var manipulatePackageId = function(packageid){
+		return "%"+packageid+"%";
 	}
 	var buildDynamicQuery = function(platform, type){
 		var platform = buildPlatformString(platform);
@@ -130,7 +135,19 @@ var store = (function () {
 		}
 		return query;
 	}
-
+	/*
+		ctx - url, platform, ctx.id, ctx.packageid
+	*/
+	var buildInstallParam = function(ctx){
+		var installParam = configsFile.archieve_location+ctx.url;
+		if (ctx.platform.toUpperCase() == 'IOS'){
+			installParam = configsFile.archieve_location+"/mam/api/apps/install/ios/"+ctx.id;
+		}
+		if(ctx.type == "Market"){
+			installParam = ctx.packageid;
+		}
+		return installParam;
+	}
     // prototype
     module.prototype = {
         constructor: module,
@@ -228,13 +245,23 @@ var store = (function () {
            return devicesArray;
 
         },
+		// [{"id" : "6a680b0a-4f7a-42a2-9f68-3bc6ff377818", "type" : "mobileapp", "path" : "/_system/governance/mobileapps/android/Batman/1.0", "lifecycle" : "MobileAppLifeCycle", "lifecycleState" : "Published", "mediaType" : "application/vnd.wso2-mobileapp+xml", "attributes" : {"overview_status" : "null", "overview_name" : "Batman", "overview_url" : "/upload/MbAk3app.apk", "overview_bundleversion" : "1.0.1", "overview_packagename" : "com.wb.goog.ArkhamCity", "overview_category" : "iOS,Android,Web Clips", "images_thumbnail" : "/publisher//upload/GTbdSicon.png", "overview_type" : "Enterprise", "overview_description" : "sdfjkdslfj ", "overview_recentchanges" : "wieruweoir ", "overview_version" : "1.0", "images_screenshots" : "/publisher//upload/8UISPscreenshot1.jpg,/publisher//upload/ElLTAscreenshot2.jpg,", "overview_provider" : "admin@admin.com", "images_banner" : "/publisher//upload/8PnYgbanner.jpg", "overview_appid" : "null", "overview_platform" : "android"}, "content" : {}, "rating" : {"average" : 0.0, "user" : 0}, "indashboard" : false}, {"id" : "e23f5cf0-d1be-421d-a44e-74bd0ab65fff", "type" : "mobileapp", "path" : "/_system/governance/mobileapps/android/Zip Archiver/1.0", "lifecycle" : "MobileAppLifeCycle", "lifecycleState" : "Published", "mediaType" : "application/vnd.wso2-mobileapp+xml", "attributes" : {"overview_status" : "null", "overview_name" : "Zip Archiver", "overview_url" : "/upload/mGc3Happ.apk", "overview_bundleversion" : "0.6.1", "overview_packagename" : "org.b1.android.archiver", "overview_category" : "iOS,Android,Web Clips", "images_thumbnail" : "/publisher//upload/1eLXXicon.png", "overview_type" : "Enterprise", "overview_description" : "dfdslkfj ", "overview_recentchanges" : "wurowieur ", "overview_version" : "1.0", "images_screenshots" : "/publisher//upload/n5iv6screenshot2.jpg,/publisher//upload/Zu0Qkscreenshot1.jpg,", "overview_provider" : "admin@admin.com", "images_banner" : "/publisher//upload/s6jCKbanner.png", "overview_appid" : "null", "overview_platform" : "android"}, "content" : {}, "rating" : {"average" : 0.0, "user" : 0}, "indashboard" : false}]
 		getAppsFromStore : function(page){
-			// var data =[{"id" : "6a680b0a-4f7a-42a2-9f68-3bc6ff377818", "type" : "mobileapp", "path" : "/_system/governance/mobileapps/android/Batman/1.0", "lifecycle" : "MobileAppLifeCycle", "lifecycleState" : "Published", "mediaType" : "application/vnd.wso2-mobileapp+xml", "attributes" : {"overview_status" : "null", "overview_name" : "Batman", "overview_url" : "/upload/MbAk3app.apk", "overview_bundleversion" : "1.0.1", "overview_packagename" : "com.wb.goog.ArkhamCity", "overview_category" : "iOS,Android,Web Clips", "images_thumbnail" : "/publisher//upload/GTbdSicon.png", "overview_type" : "Enterprise", "overview_description" : "sdfjkdslfj ", "overview_recentchanges" : "wieruweoir ", "overview_version" : "1.0", "images_screenshots" : "/publisher//upload/8UISPscreenshot1.jpg,/publisher//upload/ElLTAscreenshot2.jpg,", "overview_provider" : "admin@admin.com", "images_banner" : "/publisher//upload/8PnYgbanner.jpg", "overview_appid" : "null", "overview_platform" : "android"}, "content" : {}, "rating" : {"average" : 0.0, "user" : 0}, "indashboard" : false}, {"id" : "e23f5cf0-d1be-421d-a44e-74bd0ab65fff", "type" : "mobileapp", "path" : "/_system/governance/mobileapps/android/Zip Archiver/1.0", "lifecycle" : "MobileAppLifeCycle", "lifecycleState" : "Published", "mediaType" : "application/vnd.wso2-mobileapp+xml", "attributes" : {"overview_status" : "null", "overview_name" : "Zip Archiver", "overview_url" : "/upload/mGc3Happ.apk", "overview_bundleversion" : "0.6.1", "overview_packagename" : "org.b1.android.archiver", "overview_category" : "iOS,Android,Web Clips", "images_thumbnail" : "/publisher//upload/1eLXXicon.png", "overview_type" : "Enterprise", "overview_description" : "dfdslkfj ", "overview_recentchanges" : "wurowieur ", "overview_version" : "1.0", "images_screenshots" : "/publisher//upload/n5iv6screenshot2.jpg,/publisher//upload/Zu0Qkscreenshot1.jpg,", "overview_provider" : "admin@admin.com", "images_banner" : "/publisher//upload/s6jCKbanner.png", "overview_appid" : "null", "overview_platform" : "android"}, "content" : {}, "rating" : {"average" : 0.0, "user" : 0}, "indashboard" : false}];
 			var configs = require('/config/config.json');
 			var url  = configs.store_location+"/apis/assets/mobileapp";
 			var data = get(url, {});
 			data =parse(data.data);
 			return data;
+		},
+		getAppsFromStoreFormatted: function(){
+			var apps = this.getAppsFromStore();
+			var fApps =[];
+			for (var i = apps.length - 1; i >= 0; i--){
+				var app= apps[i];
+				var fApp = {'identity': buildInstallParam({'url': app.attributes.overview_url, 'platform': app.attributes.overview_platform, 'id': app.id, 'packageid':app.attributes.overview_packagename}), 'os': app.attributes.overview_platform, 'type': app.attributes.overview_type, 'name': app.attributes.overview_name};
+				fApps.push(fApp);
+			}
+			return fApps;
 		},
 		getAppFromStore : function(id){
 			var configs = require('/config/config.json');
@@ -245,6 +272,7 @@ var store = (function () {
 		},
 		getUsersForAppInstalled : function(package_identifier, platform){
 			var query = buildDynamicQuery(platform, 1);
+			var package_identifier = manipulatePackageId(package_identifier);
 			var returnResult = {};
 			query = db.query(query, package_identifier);
 			for (var i = query.length - 1; i >= 0; i--){
@@ -270,8 +298,10 @@ var store = (function () {
 		},
 		getUsersForAppNotInstalled : function(package_identifier, platform){
 			var query = buildDynamicQuery(platform, 2);
+			var package_identifier = manipulatePackageId(package_identifier);
 			var returnResult = {};
 			query = db.query(query, package_identifier);
+			
 			for (var i = query.length - 1; i >= 0; i--){
 				var result = query[i];
 				var userObj = user.getUser({userid:result.user_id});
@@ -295,7 +325,10 @@ var store = (function () {
 		},
 		getRolesForAppInstalled : function(package_identifier, platform){
 			var query = buildDynamicQuery(platform, 1);
+			var package_identifier = manipulatePackageId(package_identifier);
 			var returnResult = {};
+			log.info(package_identifier);
+			log.info(query);
 			query = db.query(query, package_identifier);
 			for (var i = query.length - 1; i >= 0; i--){
 				var result = query[i];
@@ -325,6 +358,7 @@ var store = (function () {
 		},
 		getRolesForAppNotInstalled : function(package_identifier, platform){
 			var query = buildDynamicQuery(platform, 2);
+			var package_identifier = manipulatePackageId(package_identifier);
 			var returnResult = {};
 			query = db.query(query, package_identifier);
 			for (var i = query.length - 1; i >= 0; i--){
@@ -358,6 +392,7 @@ var store = (function () {
 			mdm.uninstallBulk(payload);
 		},
 		installApp: function(payload){
+			// log.info(payload);
 			mdm.installBulk(payload);
 		},
 		getAllAppFromDevice: function(ctx){
