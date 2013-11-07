@@ -77,7 +77,7 @@ assign_groups = function(appController){
 	context.data = {
 		configOption : "policies",
 		groups: groups,
-		tenantId:session.get("mdmConsoleUser").tenantId,
+		tenantId:session.get("mamConsoleUser").tenantId,
 		policyId: policyId,
 		platforms: platforms,
 		users: users,
@@ -134,7 +134,7 @@ assign_resources = function(appController){
 	context.data = {
 		configOption : "policies",
 		groups: groups,
-		tenantId:session.get("mdmConsoleUser").tenantId,
+		tenantId:session.get("mamConsoleUser").tenantId,
 		policyId: policyId,
 		platforms: platforms,
 		users: users,

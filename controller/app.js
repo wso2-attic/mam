@@ -10,7 +10,7 @@ var uiConfig = function(){
 }
 
 var config = function(){
-	return require('/config/config.json');
+	return require('config/mam.js').config();
 }
 
 if(session.get("mamConsoleUserLogin") != "true" && request.getRequestURI() != uiConfig().MAM_UI_URI + "login"){
@@ -92,10 +92,10 @@ var context = function() {
                    name : "Admin",
                    role : "admin"
                };
-           }else if(currentUser.isMDMAdmin){
+           }else if(currentUser.isMAMAdmin){
                contextData.user = {
-                   name : "MDM Admin",
-                   role : "mdmadmin"
+                   name : "MAM Admin",
+                   role : "mamadmin"
                };
            }else{
                contextData.user = {

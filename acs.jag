@@ -1,7 +1,7 @@
 <%
 (function () { 
     var log = new Log(),
-            configs = require('config/config.json'),
+            configs = require('config/mam.js').config(),
             samlResponse = request.getParameter('SAMLResponse'),
 			process = require('process');
             sessionId = session.getId(),
@@ -58,22 +58,24 @@
 								var isMAMAdmin = false;
 								for (var i = 0; i < parsedRoles.length; i++) {
 									if(parsedRoles[i]=='admin'){
-										isMAMAdmin = true;
+										userFeed.isAdmin = true;
 										break;
 									}
 									if(parsedRoles[i] == 'mam_admin') {
-										isMAMAdmin = true;
+										userFeed.isMAMAdmin = true;
 										break;
 									}
-								}	
-								userFeed.isMAMAdmin = isMAMAdmin;
-								session.put("mamConsoleUserLogin", "true");
-								session.put("mamConsoleUser", userFeed);
-
-								var appController =require('/controller/app.js');
-								if(isMAMAdmin){
-									response.sendRedirect('console/management');
 								}
+                                if(userFeed.isAdmin || userFeed.isMAMAdmin){
+                                    session.put("mamConsoleUserLogin", "true");
+                                    session.put("mamConsoleUser", userFeed);
+
+                                    var appController =require('/controller/app.js');
+                                    response.sendRedirect('console/management');
+                                }else{
+                                    return;
+                                }
+								
                         }
 
                     }

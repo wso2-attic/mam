@@ -3,7 +3,7 @@ MDM module for communicating with MDM backend
 */
 var mdm = (function () {
 	var log = new Log();
-	var configs = require('/config/config.json');
+	var configs = require('config/mam.js').config();
 	var conf;
     var module = function (config) {
 		conf= config;

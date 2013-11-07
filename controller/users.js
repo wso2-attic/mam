@@ -51,7 +51,7 @@ add = function(appController) {
 	context.data = {
 		configOption : "users",
 		groups : groups,
-		tenantId : session.get("mdmConsoleUser").tenantId
+		tenantId : session.get("mamConsoleUser").tenantId
 	};
 	return context;
 
@@ -65,13 +65,13 @@ assign_groups = function(appController) {
 	var username = request.getParameter('user');
 
 	try {
-		var groups = user.getRolesByUser({
+		var groups = user.getUserRoles({
 			username : username
 		});
 	} catch(e) {
+		log.info(e);
 		var groups = [];
 	}
-
 	context = appController.context();
 	
 	// Array Remove - By John Resig (MIT Licensed)

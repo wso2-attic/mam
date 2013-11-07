@@ -5,10 +5,9 @@ var config;
             pinch = require('/modules/pinch.min.js').pinch,
             config = require('/config/config.json'),
             process = require('process'),
-            localIP = process.getProperty('server.host'),
+            localIP = process.getProperty('carbon.local.ip'),
             httpPort = process.getProperty('http.port'),
             httpsPort = process.getProperty('https.port');
-
         pinch(config, /^/, function (path, key, value) {
             if ((typeof value === 'string') && value.indexOf('%https.host%') > -1) {
                 return value.replace('%https.host%', 'https://' + localIP + ':' + httpsPort);

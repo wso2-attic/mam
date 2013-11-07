@@ -1,63 +1,65 @@
 var TENANT_CONFIGS = 'tenant.configs';
 var USER_MANAGER = 'user.manager';
 var user = (function () {
-    var config = require('../config/config.json');
+    var config = require('/config/mam.js').config();
     var routes = new Array();
 
-	var log = new Log();
-	var db;
-	var common = require("/modules/common.js");
-	var carbon = require('carbon');
-	var server = function(){
-		return application.get("SERVER");
-	}
-	
-	var claimEmail = "http://wso2.org/claims/emailaddress";
-	var claimFirstName = "http://wso2.org/claims/givenname";
-	var claimLastName = "http://wso2.org/claims/lastname";
-	var claimMobile = "http://wso2.org/claims/mobile";
-	
+    var log = new Log();
+    var db;
+    var common = require("/modules/common.js");
+    var carbon = require('carbon');
+    var server = function(){
+        return application.get("SERVER");
+    }
+    
+    var claimEmail = "http://wso2.org/claims/emailaddress";
+    var claimFirstName = "http://wso2.org/claims/givenname";
+    var claimLastName = "http://wso2.org/claims/lastname";
+    var claimMobile = "http://wso2.org/claims/mobile";
+    
     var module = function (dbs) {
-		db = dbs;
+        db = dbs;
         //mergeRecursive(configs, conf);
     };
 
-	var configs = function (tenantId) {
-	    var configg = application.get(TENANT_CONFIGS);
-		if (!tenantId) {
-	        return configg;
-	    }
-	    return configs[tenantId] || (configs[tenantId] = {});
-	};			
-	/**
-	 * Returns the user manager of the given tenant.
-	 * @param tenantId
-	 * @return {*}
-	 */
-	var userManager = function (tenantId) {
-	    var config = configs(tenantId);
-	    if (!config || !config[USER_MANAGER]) {
-			var um = new carbon.user.UserManager(server, tenantId);
-			config[USER_MANAGER] = um;
-	        return um;
-	    }
-	    return configs(tenantId)[USER_MANAGER];
-	};
-	
-	var createPrivateRolePerUser = function(username){
-		var um = userManager(common.getTenantID());
-		var indexUser = username.replace("@", ":");
-		var arrPermission = {};
-	    var permission = [
-	        'http://www.wso2.org/projects/registry/actions/get',
-	        'http://www.wso2.org/projects/registry/actions/add',
-	        'http://www.wso2.org/projects/registry/actions/delete',
-	        'authorize','login'
-	    ];
-	    arrPermission[0] = permission;
-		um.addRole("Internal/private_"+indexUser, [username], arrPermission);
-	}			
-	
+    var configs = function (tenantId) {
+        var configg = application.get(TENANT_CONFIGS);
+        if (!tenantId) {
+            return configg;
+        }
+        return configs[tenantId] || (configs[tenantId] = {});
+    };          
+    /**
+     * Returns the user manager of the given tenant.
+     * @param tenantId
+     * @return {*}
+     */
+    var userManager = function (tenantId) {
+        var config = configs(tenantId);
+        if (!config || !config[USER_MANAGER]) {
+            var um = new carbon.user.UserManager(server, tenantId);
+            config[USER_MANAGER] = um;
+            return um;
+        }
+        return configs(tenantId)[USER_MANAGER];
+    };
+    
+    var createPrivateRolePerUser = function(username){
+        var um = userManager(common.getTenantID());
+        var indexUser = username.replace("@", ":");
+        var arrPermission = {};
+        var permission = [
+            'http://www.wso2.org/projects/registry/actions/get',
+            'http://www.wso2.org/projects/registry/actions/add',
+            'http://www.wso2.org/projects/registry/actions/delete',
+            'authorize','login'
+        ];
+        arrPermission[0] = permission;
+        if(!um.roleExists("Internal/private_"+indexUser)){
+            um.addRole("Internal/private_"+indexUser, [username], arrPermission);
+        }
+    }           
+    
     function mergeRecursive(obj1, obj2) {
         for (var p in obj2) {
             try {
@@ -74,12 +76,22 @@ var user = (function () {
         }
         return obj1;
     }
-	
+    
+    function generatePassword() {
+        var length = 6,
+            charset = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            retVal = "";
+        for (var i = 0, n = charset.length; i < length; ++i) {
+            retVal += charset.charAt(Math.floor(Math.random() * n));
+        }
+        return retVal;
+    }
     // prototype
     module.prototype = {
         constructor: module,
         /*User CRUD Operations (Create, Retrieve, Update, Delete)*/
         addUser: function(ctx){
+            log.info("Check Params"+stringify(ctx));
             var claimMap = new java.util.HashMap();
 
             claimMap.put(claimEmail, ctx.username);
@@ -95,11 +107,17 @@ var user = (function () {
                     var um = userManager(common.getTenantID());
                     if(um.userExists(ctx.username)) {
                         proxy_user.error = 'User already exist with the email address.';
+                        proxy_user.status = "ALLREADY_EXIST";
                     } else {
-						log.info(ctx.groups);
-                        um.addUser(ctx.username, ctx.password,
-                            ctx.groups, claimMap, null);
+                        var generated_password =  generatePassword();
+                        if(ctx.type == 'user'){
+                            um.addUser(ctx.username, generated_password,ctx.groups, claimMap, null);
+                        }else if(ctx.type == 'administrator'){
+                            um.addUser(ctx.username, generated_password,new Array('mamadmin'), claimMap, null);
+                        }
                         createPrivateRolePerUser(ctx.username);
+                        proxy_user.status = "SUCCESSFULL";
+                        proxy_user.generatedPassword = generated_password;
                     }
                 }
                 else{
@@ -107,6 +125,7 @@ var user = (function () {
                     print('Error in getting the tenantId from session');
                 }
             } catch(e) {
+                proxy_user.status = "BAD_REQUEST";
                 log.error(e);
                 proxy_user.error = 'Error occurred while creating the user.';
             }
@@ -140,7 +159,7 @@ var user = (function () {
             if(tenantId){
                 var um = userManager(common.getTenantID());
                 var allUsers = um.listUsers();
-                var removeUsers = new Array("wso2.anonymous.user","admin");
+                var removeUsers = new Array("wso2.anonymous.user","admin","admin@admin.com");
                 var users = common.removeNecessaryElements(allUsers,removeUsers);
                 for(var i = 0; i < users.length; i++) {
                     var user = um.getUser(users[i]);
@@ -164,10 +183,17 @@ var user = (function () {
             return users_list;
         },
         deleteUser: function(ctx){
-            var um = userManager(common.getTenantID());
-
-            um.removeUser(ctx.userid);
-
+            var result = db.query("select * from devices where user_id = ?",ctx.userid);
+            log.info("Result :"+result);
+            if(result != undefined && result != null && result != '' && result[0].length != undefined && result[0].length != null && result[0].length > 0){
+                return 404;
+            }else{
+                var um = userManager(common.getTenantID());
+                um.removeUser(ctx.userid);
+                var private_role = ctx.userid.replace("@", ":");
+                um.removeRole("Internal/private_"+private_role);
+                return 200;
+            }
         },
 
         /*End of User CRUD Operations (Create, Retrieve, Update, Delete)*/
@@ -176,9 +202,10 @@ var user = (function () {
 
         /*Get list of roles belongs to particular user*/
         getUserRoles: function(ctx){
+            log.info("User Name >>>>>>>>>"+ctx.username);
             var um = userManager(common.getTenantID());
-            var user = um.getUser(ctx.username);
-            var roleList = common.removePrivateRole(user.getRoles());
+            var roles = um.getRoleListOfUser(ctx.username);
+            var roleList = common.removePrivateRole(roles);
             return roleList;
         },
         updateRoleListOfUser:function(ctx){
@@ -227,10 +254,10 @@ var user = (function () {
                 var flag = 0;
                 for(var j=0 ;j<roles.length;j++){
                     log.info("Test iteration2"+roles[j]);
-                    if(roles[j]=='admin'||roles[j]=='mdmadmin'){
+                    if(roles[j]=='admin'||roles[j]=='mamadmin'){
                         flag = 1;
                         break;
-                    }else if(roles[j]=='store'||roles[j]=='publisher'){
+                    }else if(roles[j]==' Internal/publisher'||roles[j]=='Internal/reviewer'||roles[j]=='Internal/store'){
                         flag = 2;
                         break;
                     }else{
@@ -249,6 +276,7 @@ var user = (function () {
                     users[i].type = 'user';
                     usersByType.push( users[i]);
                 }
+                //print(stringify(users[i]));
             }
             return usersByType;
         },
@@ -259,27 +287,31 @@ var user = (function () {
 
         /*authentication for devices only*/
         authenticate: function(ctx){
-			ctx.username = ctx.username+"@carbon.super";
-			log.info("username "+ctx.username);
-			var authStatus = server().authenticate(ctx.username, ctx.password);
-			log.info(">>auth "+authStatus);
-			if(!authStatus) {
-				return null;
-			}
-			var user =  this.getUser({'userid': ctx.username});
-			var result = db.query("SELECT COUNT(id) AS record_count FROM tenantplatformfeatures WHERE tenant_id = ?",  stringify(user.tenantId));
-			if(result[0].record_count == 0) {
-				for(var i = 1; i < 13; i++) {
-					var result = db.query("INSERT INTO tenantplatformfeatures (tenant_id, platformFeature_Id) VALUES (?, ?)", stringify(user.tenantId), i);
-				}
-			}
-		    return user;
-		},
+            ctx.username = ctx.username;
+            log.info("username "+ctx.username);
+            var authStatus = server().authenticate(ctx.username, ctx.password);
+            log.info(">>auth "+authStatus);
+            if(!authStatus) {
+                return null;
+            }
+            var user =  this.getUser({'userid': ctx.username});
+            var result = db.query("SELECT COUNT(id) AS record_count FROM tenantplatformfeatures WHERE tenant_id = ?",  stringify(user.tenantId));
+            if(result[0].record_count == 0) {
+                for(var i = 1; i < 13; i++) {
+                    var result = db.query("INSERT INTO tenantplatformfeatures (tenant_id, platformFeature_Id) VALUES (?, ?)", stringify(user.tenantId), i);
+                }
+            }
+            return user;
+        },
 
         /*send email to particular user*/
         sendEmail: function(ctx){
-            content = "Dear "+ ctx.first_name+", "+config.email.emailTemplate+config.HTTPS_URL+"/mdm/api/device_enroll \n \n"+config.email.companyName;
-            subject = "MDM Enrollment";
+            var password_text = "";
+            if(ctx.generatedPassword){
+                password_text = "Your password to your login : "+ctx.generatedPassword;
+            }
+            content = "Dear "+ ctx.first_name+", "+password_text+" \n"+config.email.companyName;
+            subject = "MAM Enrollment";
 
             var email = require('email');
             var sender = new email.Sender("smtp.gmail.com", "25", config.email.senderAddress, config.email.emailPassword, "tls");
@@ -289,14 +321,18 @@ var user = (function () {
             sender.to = ctx.username;
             sender.subject = subject;
             sender.text = content;
-            sender.send();
+            try{
+                sender.send();
+            }catch(e){
+                log.info(e);
+            }
         },
 
         /*Get all devices belongs to particular user*/
-		getDevices: function(obj){
-			var devices = db.query("SELECT * FROM devices WHERE user_id= ? AND tenant_id = ?", String(obj.userid), common.getTenantID());
-			return devices;
-		}
+        getDevices: function(obj){
+            var devices = db.query("SELECT * FROM devices WHERE user_id= ? AND tenant_id = ?", String(obj.userid), common.getTenantID());
+            return devices;
+        }
 
 
     };

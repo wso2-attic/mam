@@ -15,7 +15,7 @@ var router = new goose({
 //Setting up the authorization roles
 router.setupRules(require('/config/route.json'));
 
-var configs = require('config/config.json');
+var configs = require('config/mam.js').config();
 //For VPP
 var vppManagerModule = require('modules/vppManager.js').vppManager;
 var vppManager = new vppManagerModule(db);

@@ -1,6 +1,6 @@
 {
-	'tenanted': true,
-	"ssoConfiguration": {
+    "tenanted": true,
+    "ssoConfiguration": {
         "enabled": true,
         "issuer": "mam",
         "identityProviderURL": "%https.host%/sso/samlsso.jag",
@@ -10,10 +10,16 @@
         "storeAcs": "%https.host%/mam/acs",
         "keyStoreName": "/repository/resources/security/wso2carbon.jks"
     },
-	'publisher_location': "https://192.168.1.157:9443",
-	'archieve_location': "http://192.168.1.157:9763",
-	'store_location': "http://192.168.1.157:9763/store",
-	"mdm": {
-		"api" : "http://192.168.1.157:9763/mdm/api"
-	}
+    "publisher_location": "%https.host%",
+    "archieve_location": "%https.host%",
+    "store_location": "%https.host%/store",
+    "mdm": {
+        "api" : "%https.host%/mdm/api"
+    },
+    "email": {
+        "companyName": "WSO2",
+        "senderAddress": "",
+        "emailPassword": "",
+        "emailTemplate": "\nYou have been registered to the WSO2Mobile MAM. \n \n"
+    }
 }
