@@ -99,7 +99,7 @@ router.post('apps/roles/uninstall', function(ctx){
 				var device = row.devices[j];
 				uninstallPayload.push({
 					deviceid : device,
-					packageId : ctx.packageid,
+					identity : ctx.packageid,
 					platform_id: ctx.platform,
 					type: ctx.type
 				});
@@ -148,7 +148,7 @@ router.post('apps/users/uninstall', function(ctx){
 				uninstallPayload.push({
 					deviceid : device,
 					platform_id: ctx.platform,
-					packageId : ctx.packageid,
+					identity : ctx.packageid,
 					type: ctx.type
 				});
 			};
