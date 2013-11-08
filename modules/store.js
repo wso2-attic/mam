@@ -18,9 +18,6 @@ var store = (function () {
     var mdm = new mdmModule();
 	var configsFile = require('config/mam.js').config();
 	
-	var vppManagerModule = require('modules/vppManager.js').vppManager;
-	var vppManager = new vppManagerModule(db);
-	
 	var GET_APP_FEATURE_CODE = '502A';
 	
     function mergeRecursive(obj1, obj2) {

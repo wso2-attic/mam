@@ -19,7 +19,7 @@ if(session.get("mamConsoleUserLogin") != "true" && request.getRequestURI() != ui
 var index = function(){
 	var user = session.get("mamConsoleUser");
 	if(user!=null){
-		if(user.isMAMAdmin){
+		if(user.isMAMAdmin || user.isAdmin){
 			response.sendRedirect('console/management');
 		}
 	}

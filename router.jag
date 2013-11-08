@@ -40,7 +40,7 @@ var buildInstallParam = function(ctx){
 //Inserts a VPP code into the payload if the app type is VPP
 var injectVPPCode = function(appid, installData){
 	if(installData.type=="VPP"){
-		installData.coupon = vppManager.getCoupon(appid, installData.deviceid, userId);
+		installData.coupon = vppManager.getCoupon(appid, installData.deviceid, current_user.username);
 	}
 	return installData;
 }
@@ -104,7 +104,7 @@ router.post('apps/roles/uninstall', function(ctx){
 					type: ctx.type
 				});
 				
-			};
+			}
 		}
 	};
 	store.uninstallApp(uninstallPayload);
@@ -121,6 +121,8 @@ router.post('apps/roles/install', function(ctx){
 			for (var j = row.devices.length - 1; j >= 0; j--){
 				var device = row.devices[j];
 				try{
+					log.info('))))');
+					log.info(stringify(installParam));
 					installPayload.push(injectVPPCode(ctx.id, {
 						deviceid : device,
 						identity : installParam,
