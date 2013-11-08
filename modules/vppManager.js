@@ -91,7 +91,22 @@ var vppManager = (function () {
 			}else{
 				throw "Error: No engaged code for coupone provided found";
 			}
-		}
+		},
+        addCoupons: function(coupons, uuid){
+            var tenantId = common.getTenantID();
+            var query = "insert into vpp_coupons set tenantId=?, uuid =? , coupon=?, status='F'";
+            db.query(query,tenantId,appid, coupon);
+        },
+        removeCoupon: function(uuid, coupon){
+            var tenantId = common.getTenantID();
+            var query = "delete from vpp_coupons where tenantId=? and uuid =? and coupon=?";
+            db.query(query,tenantId,uuid, coupon);
+        },
+        getCoupons: function(){
+            var tenantId = common.getTenantID();
+            var query = "select * from vpp_coupons where tenantId=?";
+            return db.query(query,tenantId);
+        }
     };
     return module;
 })();
