@@ -56,6 +56,11 @@ function getResource(name){
 	f.close();
 	return cont;
 }
+
+router.get('apps', function(ctx){
+	var result = store.getAppsFromStore(ctx.paging);
+	response.content = result;
+});
 /* 
  Sample call - https://localhost:9443/mam/api/apps/roles/installed?platform=iOS&packageid=com.naveenium.foursquare
 */
