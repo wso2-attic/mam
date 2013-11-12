@@ -590,7 +590,7 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 			.list_carousel li {
 				
 				width: 50px;
-				height: 200px;
+				height: 150px;
 				padding: 20px;
 				margin: 6px;
 				display: block;
