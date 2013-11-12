@@ -5,6 +5,24 @@ $(document).ready(function() {
 	//
 	// Iterate over an object, setting 'key' and 'value' for each property in
 	// the object.
+	
+	
+	$('#foo2').carouFredSel({
+					auto: false,
+					prev: '#prev2',
+					next: '#next2',
+					pagination: "#pager2",
+					mousewheel: true,
+					swipe: {
+						onMouse: true,
+						onTouch: true
+					}
+				});
+	
+	
+	
+	
+	
 	$.ajaxSetup({
 	  contentType : "application/json"
 	});
