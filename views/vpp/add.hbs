@@ -14,7 +14,7 @@
 					</div>
 
 					<div class="block-body">
-						<form class="form-horizontal" data-validate="parsley">
+						<form id="submitform" method="POST" class="form-horizontal" action="/mam/api/vpp" data-validate="parsley">
 							<div class="control-group">
 								<label class="control-label" for="inputFirstName">App Name</label>
 								<div class="controls">
@@ -25,13 +25,13 @@
 							<div class="control-group">
 								<label class="control-label" for="inputFirstName">Promo Codes</label>
 								<div class="controls">
-									<input type="file" name="file" id="file">
+									<input type="file" name="promocode" id="promocode">
 								</div>
 							</div>
 
 							<hr>
 							<div class="offset1-5">
-								<a class="btn btn-orange" id="btn-add" href="#" >Add</a>
+								<input type="submit" class="btn btn-orange" value="Add" >
 							</div>
 
 							<input type="hidden" id="tenantId" value="{{data.tenantId}}" />
