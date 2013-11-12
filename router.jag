@@ -33,7 +33,11 @@ var buildInstallParam = function(ctx){
 		installParam = configs.archieve_location+"/mam/api/apps/install/ios/"+ctx.id;
 	}
 	if(ctx.type == "Market" || ctx.type == "VPP"){
-		installParam = ctx.packageid;
+		if(ctx.platform.toUpperCase() == 'IOS'){
+			installParam = getApp(ctx.id).attributes.overview_appid;
+		}else{
+			installParam = ctx.packageid;
+		}
 	}
 	return installParam;
 }
