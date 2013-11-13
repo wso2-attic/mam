@@ -185,19 +185,21 @@ $(".btn-invite").click(function() {
 });
 
 
-$(document).ready( function () {
-	
-	jQuery.ajax({
-		url : getServiceURLs("permissionFeatures"),
-		type : "GET",			
-		contentType : "application/json",
-		dataType : "json",
 
-		success : function(datas){
-		 treeData = datas;
-		
-		
-		$("#tree3").dynatree({
+
+$(document).ready( function () {
+        
+        jQuery.ajax({
+                url : getServiceURLs("permissionFeatures"),
+                type : "GET",                        
+                contentType : "application/json",
+                dataType : "json",
+
+                success : function(datas){
+                 treeData = datas;
+                
+                
+                $("#tree3").dynatree({
       checkbox: true,
       selectMode: 3,
       children: treeData,
@@ -226,57 +228,49 @@ $(document).ready( function () {
           node.toggleSelect();
           return false;
         }
-      }     
+      }
     });
-		
-		
-		
-		}
-	});
-	
-		
-	
-	oTable = $('#main-table').dataTable( {
-		"sDom": "<'row-fluid'<'tabel-filter-group span8'T><'span4'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
-		"iDisplayLength": 20,
-		 "bStateSave": false,
-		"oTableTools": {
-			"aButtons": [
-				"copy",
-				"print",
-				{
-					"sExtends":    "collection",
-					"sButtonText": 'Save <span class="caret" />',
-					"aButtons":    [ "csv", "xls", "pdf" ]
-				}
-			]
-		}
-	} );
-	
-	
+                
+                
+                
+                }
+        });
+        
+                
+        
+        oTable = $('#main-table').dataTable( {
+                "sDom": "<'row-fluid'<'tabel-filter-group span8'T><'span4'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+                "iDisplayLength": 20,
+                 "bStateSave": false,
+                 "aoColumnDefs": [
+					  {
+					     bSortable: false,
+					     aTargets: [ -1 ]
+					  }
+				],
+                "oTableTools": {
+                        "aButtons": [
+                                "copy",
+                                "print",
+                                {
+                                        "sExtends": "collection",
+                                        "sButtonText": 'Save <span class="caret" />',
+                                        "aButtons": [ "csv", "xls", "pdf" ]
+                                }
+                        ]
+                }
+        } );
+        
+        
 $(".tabel-filter-group").html("Type: " + fnCreateSelect( oTable.fnGetColumnData(1)));
-	
-	$('.tabel-filter-group select').change( function () {
+        
+        $('.tabel-filter-group select').change( function () {
             oTable.fnFilter( $(this).val(), 1 );
      } );
-		
-	
-	
-//	createFilter(oTable, 0, "select-filter-0", "Groups");
-//	$('#select-filter-0', this).change(function () {
-//		 oTable.fnFilter( $(this).val(), 0);
-//	})
-	
-	
-//	createFilter(oTable, 1, "select-filter-1", "Groups");
-//	$('#select-filter-1', this).change(function () {
-//		 oTable.fnFilter( $(this).val(), 1);
-//	})
-	 
-	 
-//	$('.selectpicker').selectpicker();
-	
-	
+                
+        
+
+        
 } );
 
 
@@ -288,6 +282,3 @@ function fnCreateSelect( aData ){
     }
     return r+'</select>';
 }
-
-
-
