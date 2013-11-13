@@ -194,7 +194,10 @@ router.post('apps/users/install', function(ctx){
 	store.installApp(installPayload,ctx.platform);
 	response.status=200;
 });
-
+router.post("apps/install", function(ctx){
+	var installParam = buildInstallParam(ctx);
+	var result = store.getUsersForAppNotInstalled(ctx.packageid, ctx.platform);
+});
 router.post("apps/vpp/callback", function(ctx){
 	try{
 		vppManager.installCallback(ctx);
@@ -203,7 +206,13 @@ router.post("apps/vpp/callback", function(ctx){
 		response.sendError(500);
 	}
 });
-
+router.post("vpp", function(ctx){
+	var csv =ctx.csv;
+	var csvReader = require('modules/csv.js');
+	csv = csvReader.parse(csv);
+	vppManager.addCoupons();
+	return csv; 
+});
 router.get("apps/install/ios/{id}", function(ctx){
 	var app = getApp(ctx.id);
 	var iosManifest = compileTemplate("/template.hbs", {url:configs.archieve_location+""+app.attributes.overview_url, bundleid: app.attributes.overview_packagename, bundleversion: app.attributes.overview_bundleversion,  appname:app.attributes.overview_name});
