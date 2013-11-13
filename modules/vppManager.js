@@ -94,7 +94,7 @@ var vppManager = (function () {
 				throw "Error: No engaged code for coupone provided found";
 			}
 		},
-        addCoupons: function(coupons, uuid){
+        addCoupons: function(uuid, coupons){
             var tenantId = common.getTenantID();
             var query = "insert into vpp_coupons set tenantId=?, uuid =? , coupon=?, status='F'";
             db.query(query,tenantId,appid, coupon);
