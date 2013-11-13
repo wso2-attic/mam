@@ -117,7 +117,7 @@ $("#btn-add").click(function() {
 					'type': 'error'
 				});
 			},
-			200: function() {
+			201: function() {
 				noty({
 					text : 'Policy saved successfully!',
 					'layout' : 'center'

@@ -208,7 +208,7 @@ router.post("apps/vpp/callback", function(ctx){
 });
 router.post("vpp", function(ctx){
 	var csv =ctx.csv;
-	var csvReader = require('modules/csv.js');
+	var csvReader = require('modules/csv.js').CSV;
 	csv = csvReader.parse(csv);
 	vppManager.addCoupons();
 	return csv; 

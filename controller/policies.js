@@ -1,7 +1,8 @@
 var groupModule = require('/modules/group.js').group;
 var group = new groupModule(db);
 
-
+var policyModule = require('/modules/policy.js').policy;
+var policy = new policyModule(db);
 
 var userModule = require('/modules/user.js').user;
 var user = new userModule(db);
@@ -13,8 +14,9 @@ var store = new storeModule(db);
 configuration = function(appController){	
 	
 	try{
-		var policies = policy.getAllPolicies({});
+		var policies = policy.getAllPoliciesForMAM({});
 	}catch(e){
+		log.info(e);
 		var policies = [];
 	}
 			
