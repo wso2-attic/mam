@@ -11,18 +11,37 @@
 			<button type="submit" class="btn">Search</button>
 		</form>
 	</div>
-	<div class="well">
-		{{#each data.apps}}
-		<div class="app_box">
-			<a href="#appid" data-packageid="{{this.attributes.overview_packagename}}" data-platform="{{this.attributes.overview_platform}}" data-type="{{this.attributes.overview_type}}" data-url="{{this.attributes.overview_url}}" data-id="{{this.id}}">
-				<p class="text-center"><b>{{this.attributes.overview_name}}</b></p>
-				<img src="{{../config.publisher_location}}{{this.attributes.images_thumbnail}}" class="icon img-polaroid">
-			</a>
+	
+	
+		<div class="well">
+		<div class="list_carousel">
+				<ul id="foo2">
+					{{#each data.apps}}
+					<li>						
+					<div class="app_box">
+						<a href="#appid" data-packageid="{{this.attributes.overview_packagename}}" data-platform="{{this.attributes.overview_platform}}" data-type="{{this.attributes.overview_type}}" data-url="{{this.attributes.overview_url}}" data-id="{{this.id}}">
+							<p class="text-center"><b>{{this.attributes.overview_name}}</b></p>
+							<img src="{{../config.publisher_location}}{{this.attributes.images_thumbnail}}" class="icon img-polaroid">
+						</a>
+					</div>	
+					</li>
+					{{/each}}
+				</ul>				
 		</div>
-		{{/each}}
 	</div>
+	
+	<div class="container">
+		<div class="clearfix"></div>
+				<a id="prev2" class="prev" href="#">&lt;</a>
+				<a id="next2" class="next" href="#">&gt;</a>
+		<div id="pager2" class="pager"></div>
+	</div>	
+	
 </div>
-<div class="stakes">
+
+<div style="clear: both"></div>
+
+<div class="container stakes">
 	<ul class="nav nav-tabs">
 	  <li class="active">
 	    <a href="#roles" data-toggle="tab">Roles</a>
