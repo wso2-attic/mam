@@ -39,7 +39,7 @@ add = function(appController) {
 	context = appController.context();
 
 	try {
-		var groups = group.getGroupsByType({type:context.contextData.user.role});		
+		var groups = group.getGroupsByType({type:context.contextData.user.role});	
 	} catch(e) {		
 		var groups = [];
 	}
@@ -73,24 +73,6 @@ assign_groups = function(appController) {
 		var groups = [];
 	}
 	context = appController.context();
-	
-	// Array Remove - By John Resig (MIT Licensed)
-	Array.prototype.remove = function(from, to) {
-	  var rest = this.slice((to || from) + 1 || this.length);
-	  this.length = from < 0 ? this.length + from : from;
-	  return this.push.apply(this, rest);
-	};
-	
-	
-	if (context.contextData.user.role != 'masteradmin') {
-		for (var i = 0; i < groups.length; i++) {
-			if (groups[i].name == 'masteradmin' | groups[i].name == "admin") {
-				groups.remove(i);
-			}
-		}
-	}
-	
-	
 	
 	context.title = context.title + " | Assign Users to group";
 	context.page = "configuration";
