@@ -4,7 +4,7 @@ class="table table-striped table-bordered" id="main-table">
 		<tr>
 			<th>First Name</th>
 			<th>Last Name</th>
-			<th>e Mail</th>			
+			<th>E-Mail</th>			
 			<th>Type</th>
 			<th>Action</th>
 		</tr>
@@ -18,11 +18,13 @@ class="table table-striped table-bordered" id="main-table">
 			<td>{{type}}</td>
 			<td class="center">
 				
-			<a href="assign_groups?user={{username}}"  class="btn-assign-roles" data-item="{{username}}" title="Assign Roles"><i class="icon-edit"> </i> Assign Roles</a>&nbsp; 	
-				 
-			<a href="#"  class="btn-invite" data-item="{{username}}" title="Invite"><i class="icon-envelope"> </i> Invite</a>&nbsp; 
+			{{#compare type 'administrator' operator='!='}}
+				<a href="view?user={{username}}"  data-item="{{username}}" title="View User"><i class="icon-user"> </i> View User</a>&nbsp;
+				<a href="/mdm/users/assign_groups?user={{username}}"  class="btn-assign-roles" data-item="{{username}}" title="Assign Roles"><i class="icon-edit"> </i> Assign Roles</a>&nbsp;
+				<a href="#"  class="btn-invite" data-item="{{username}}" title="Invite"><i class="icon-envelope"> </i> Invite</a>&nbsp;  	
+			{{/compare}}		
 			
-			<a href="#"  class="btn-item-remove" data-item="{{username}}" title="Remove"><i class="icon-remove"> </i> Unassign</a>
+			<a href="#"  class="btn-item-remove" data-item="{{username}}" title="Remove"><i class="icon-remove"> </i> Remove</a>
 			
 			</td>
 		</tr>
