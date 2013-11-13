@@ -23,16 +23,15 @@ $("#btn-add").click(function() {
 	// alert(JSON.stringify(userGroupsArray));
 	jso = {
 		"tenant_id" : tenantId,
-		"name" : name,
-		"type" : type,
-		"users" : usersArray
+		"name" : name	
 	};
 
+	var previousName = getURLParameter('group');
 	
 
 	jQuery.ajax({
-		url : getServiceURLs("groupsCRUD", ""),
-		type : "POST",		
+		url : getServiceURLs("groupsCRUD", previousName),
+		type : "PUT",		
 		data : JSON.stringify(jso),
 		contentType : "application/json",
      	dataType : "json",
@@ -60,7 +59,7 @@ $("#btn-add").click(function() {
 			},
 			201: function() {
 				noty({
-					text : 'Roles added successfully!',
+					text : 'Role edited successfully!',
 					'layout' : 'center'
 				});
 				window.location.assign("configuration");

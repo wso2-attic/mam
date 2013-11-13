@@ -5,6 +5,12 @@ $(document).ready(function() {
 		"sDom" : "<'row-fluid'<'tabel-filter-group span8'T><'span4'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 		"iDisplayLength" : 10,		
 		"bStateSave" : false,
+		 "aoColumnDefs": [
+					  {
+					     bSortable: false,
+					     aTargets: [ -1 ]
+					  }
+		],
 		"oTableTools" : {
 			"aButtons" : ["copy", "print", {
 				"sExtends" : "collection",
@@ -127,7 +133,16 @@ $(".btn-invite").click(function() {
 			text : 'Ok',
 			onClick : function($noty) {				
 				
-				$noty.close();	
+				$noty.close();
+				
+				var n = noty({
+								text : 'Inviting user, please wait....',
+								'layout' : 'center',
+								timeout: false
+											
+				});
+				
+					
 				jQuery.ajax({
 					url : getServiceURLs("usersInvite"),
 					type : "PUT",					
@@ -136,6 +151,7 @@ $(".btn-invite").click(function() {
 			     	dataType : "json",
 			     	statusCode: {
 						400: function() {
+							n.close();
 							noty({
 								text : 'Error occured!',
 								'layout' : 'center',
@@ -143,6 +159,7 @@ $(".btn-invite").click(function() {
 							});
 						},
 						500: function() {
+							n.close();
 							noty({
 								text : 'Fatal error occured!',
 								'layout' : 'center',
@@ -150,8 +167,9 @@ $(".btn-invite").click(function() {
 							});
 						},
 						200: function() {
+							n.close();
 							noty({
-								text : 'User is invited successfully!',
+								text : 'invitation is sent to user successfully!',
 								'layout' : 'center'
 							});
 							window.location.assign("configuration");
