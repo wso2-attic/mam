@@ -50,7 +50,7 @@ var navigation = function(role) {
             topNavigation = [
                 {name : "Management"	, link: app_info.MAM_UI_URI + "console/management", displayPage: "management", icon:"icon-briefcase"},
                 {name : "Configurations", link: app_info.MAM_UI_URI + "users/configuration", displayPage: "configuration", icon:"icon-wrench"},
-                {name : "VPP", link: app_info.MAM_UI_URI + "vpp/configuration", displayPage: "vpp", icon:"icon-mobile-phone"}
+               // {name : "VPP", link: app_info.MAM_UI_URI + "vpp/configuration", displayPage: "vpp", icon:"icon-mobile-phone"}
             ];
             var configNavigation =	[
                 {name : "Users", link: app_info.MAM_UI_URI + "users/configuration", displayPage: "users", icon:"icon-user"},
@@ -61,7 +61,7 @@ var navigation = function(role) {
             topNavigation = [
                 {name : "Configurations", link: app_info.MAM_UI_URI + "users/configuration", displayPage: "configuration", icon:"icon-wrench"},
                 {name : "Management"	, link: app_info.MAM_UI_URI + "devices/management", displayPage: "management", icon:"icon-briefcase"},
-                {name : "VPP", link: app_info.MAM_UI_URI + "vpp/configuration", displayPage: "vpp", icon:"icon-mobile-phone"}
+               // {name : "VPP", link: app_info.MAM_UI_URI + "vpp/configuration", displayPage: "vpp", icon:"icon-mobile-phone"}
             ];
             var configNavigation =	[
                 {name : "Users", link: app_info.MAM_UI_URI + "users/configuration", displayPage: "users", icon:"icon-user"},
