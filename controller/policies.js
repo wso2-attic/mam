@@ -194,6 +194,12 @@ edit = function(appController){
 	var policyId = request.getParameter('policy');
 	var policyName = request.getParameter('policy');
 	
+	try{
+		var installedApps =  store.getAppsFromStoreFormatted();
+	}catch(e){
+		var installedApps = [];
+	}
+	
 	
 	context.jsFile= "policies/edit.js";
 	context.title = context.title + " | Configuration";	
@@ -201,7 +207,8 @@ edit = function(appController){
 	context.data = {
 			configOption : "policies",
 			policyId: policyId,
-			policyName: policyName
+			policyName: policyName,
+			installedApps: installedApps
 			
 	}
 	return context;
