@@ -74,8 +74,14 @@ var store = (function () {
 			var userList = um.getUserListOfRole(role);
 	        var deviceCountAll = 0;
 	        for(var j = 0; j < userList.length; j++) {
+	        	var role = userList[j];
+	        	if(role.indexOf('/') !== -1){
+				 role = role.split('/')[1];
+	        	 log.info(role);
+				}
+	        	
 	            var resultDeviceCount = db.query("SELECT COUNT(id) AS device_count FROM devices WHERE user_id = ? AND tenant_id = ? and "+buildPlatformString(platform),
-	                String(userList[j]), getTenantID());
+	                String(role), getTenantID());
 	            deviceCountAll += parseInt(resultDeviceCount[0].device_count);
 	        }
 		}else{
