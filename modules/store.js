@@ -263,7 +263,7 @@ var store = (function () {
 			var fApps =[];
 			for (var i = apps.length - 1; i >= 0; i--){
 				var app= apps[i];
-				var fApp = {'identity': buildInstallParam({'url': app.attributes.overview_url, 'platform': app.attributes.overview_platform, 'id': app.id, 'packageid':app.attributes.overview_packagename}), 'os': app.attributes.overview_platform, 'type': app.attributes.overview_type, 'name': app.attributes.overview_name};
+				var fApp = {'identity': buildInstallParam({'url': app.attributes.overview_url, 'platform': app.attributes.overview_platform, 'id': app.id, 'packageid':app.attributes.overview_packagename, 'type': app.attributes.overview_type}), 'os': app.attributes.overview_platform, 'type': app.attributes.overview_type, 'name': app.attributes.overview_name};
 				fApps.push(fApp);
 			}
 			return fApps;

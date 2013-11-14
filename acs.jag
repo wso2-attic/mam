@@ -73,7 +73,7 @@
                                     var appController =require('/controller/app.js');
                                     response.sendRedirect('console/management');
                                 }else{
-                                    return;
+                                    response.sendError(403);
                                 }
 								
                         }
