@@ -1,7 +1,7 @@
 <div class="apps">
 	<h3>Apps</h3>
 	<div class="filter-box">
-		<form class="form-search pull-right">
+		<form class="form-search pull-right" style="display: none">
 			<select>
 			  <option>iOS</option>
 			  <option>Android</option>
@@ -21,7 +21,7 @@
 					<div class="app_box">
 						<a href="#appid" data-packageid="{{this.attributes.overview_packagename}}" data-platform="{{this.attributes.overview_platform}}" data-type="{{this.attributes.overview_type}}" data-url="{{this.attributes.overview_url}}" data-id="{{this.id}}">
 							<p class="text-center"><b>{{this.attributes.overview_name}}</b></p>
-							<img src="{{../config.publisher_location}}{{this.attributes.images_thumbnail}}" class="icon img-polaroid">
+							<img src="{{../config.publisher_location}}{{this.attributes.images_thumbnail}}" class="icon img-polaroid" style="width:75px">
 						</a>
 					</div>	
 					</li>
