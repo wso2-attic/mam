@@ -59,7 +59,6 @@ add = function(appController) {
 
 
 
-
 assign_groups = function(appController) {
 
 	var username = request.getParameter('user');

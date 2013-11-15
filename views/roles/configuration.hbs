@@ -37,8 +37,7 @@
 										<td class="center">
 											{{#compare ../contextData.user.role 'admin'}}
 												{{#compare type 'mam' operator='!='}}
-													<a href="assign_permissions?group={{name}}" data-group="{{name}}"  data-toggle="modal" title="Assign Permissions"
-													class="add-permission-link"><i class="icon-cog"> </i> Permissions </a> &nbsp;
+													
 												{{/compare}}
 											{{/compare}}
 											<a href="view_users?group={{name}}" data-group="{{name}}"  data-toggle="modal" title="View Users"
