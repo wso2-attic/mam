@@ -115,6 +115,12 @@ $(document).ready(function() {
 					"sDom" : "<'row-fluid'<'tabel-filter-group span8'T><'span4'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 					"iDisplayLength" : 20,		
 					"bStateSave" : false,
+					"aoColumnDefs": [
+					  {
+					     bSortable: false,
+					     aTargets: [ 0 ]
+					  }
+					],
 					"oTableTools" : {
 						"aButtons" : ["copy", "print", {
 							"sExtends" : "collection",
@@ -156,6 +162,12 @@ $(document).ready(function() {
 					"sDom" : "<'row-fluid'<'tabel-filter-group span8'T><'span4'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 					"iDisplayLength" : 20,		
 					"bStateSave" : false,
+					"aoColumnDefs": [
+					  {
+					     bSortable: false,
+					     aTargets: [ 0 ]
+					  }
+					],
 					"oTableTools" : {
 						"aButtons" : ["copy", "print", {
 							"sExtends" : "collection",
@@ -195,6 +207,12 @@ $(document).ready(function() {
 					"sDom" : "<'row-fluid'<'tabel-filter-group span8'T><'span4'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 					"iDisplayLength" : 20,		
 					"bStateSave" : false,
+					"aoColumnDefs": [
+					  {
+					     bSortable: false,
+					     aTargets: [ 0 ]
+					  }
+					],
 					"oTableTools" : {
 						"aButtons" : ["copy", "print", {
 							"sExtends" : "collection",
@@ -234,6 +252,12 @@ $(document).ready(function() {
 					"sDom" : "<'row-fluid'<'tabel-filter-group span8'T><'span4'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 					"iDisplayLength" : 20,		
 					"bStateSave" : false,
+					"aoColumnDefs": [
+					  {
+					     bSortable: false,
+					     aTargets: [ 0 ]
+					  }
+					],
 					"oTableTools" : {
 						"aButtons" : ["copy", "print", {
 							"sExtends" : "collection",

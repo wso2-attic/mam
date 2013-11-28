@@ -144,9 +144,36 @@ $( "#modalBlackListAppButton" ).click(function() {
 });
 
 $( "#modalBlackListAppRemove" ).click(function() {
-	 $("#inputBlackListApps :selected").each(function() {
-    		$(this).remove();
-	});
+	 
+	 
+	 noty({
+		text : 'Are you sure you want delete this app from blackisted list?',
+		buttons : [{
+			addClass : 'btn btn-cancel',
+			text : 'Cancel',
+			onClick : function($noty) {
+				$noty.close();
+
+			}
+			
+			
+		}, {
+			
+			addClass : 'btn btn-orange',
+			text : 'Ok',
+			onClick : function($noty) {
+				
+				 $("#inputBlackListApps :selected").each(function() {
+			    		$(this).remove();
+				});
+				$noty.close();	
+				
+			}
+			
+		}]
+	});	
+
+	
 });
 
 
