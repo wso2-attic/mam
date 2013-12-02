@@ -140,13 +140,56 @@ $("#btn-add").click(function() {
 
 
 $( "#modalBlackListAppButton" ).click(function() {
+		var alreadyExist = false;
+		$("#inputBlackListApps option").each(function(){
+    		if($(this).data('type') == $("#modalBlackListType").val() && $(this).val() == $("#modalBlackListPackageName").val() && $(this).data('os') == $("#modalBlackListOS").val() ){
+    			noty({
+							text : 'Added app already exist!',
+							'layout' : 'center',
+							'type': 'error'
+				});
+				alreadyExist = true;
+				return;
+    		}
+		});
+	
+		if(alreadyExist){
+			return;
+		}
 		$("#inputBlackListApps").append('<option data-type="'+ $("#modalBlackListType").val() +'" data-os="'+ $("#modalBlackListOS").val() +'" value="'+ $("#modalBlackListPackageName").val()  +'">' + $("#modalBlackListPackageName").val()  + '</option>');
 });
 
 $( "#modalBlackListAppRemove" ).click(function() {
-	 $("#inputBlackListApps :selected").each(function() {
-    		$(this).remove();
-	});
+	 
+	 
+	 noty({
+		text : 'Are you sure you want delete this app from blackisted list?',
+		buttons : [{
+			addClass : 'btn btn-cancel',
+			text : 'Cancel',
+			onClick : function($noty) {
+				$noty.close();
+
+			}
+			
+			
+		}, {
+			
+			addClass : 'btn btn-orange',
+			text : 'Ok',
+			onClick : function($noty) {
+				
+				 $("#inputBlackListApps :selected").each(function() {
+			    		$(this).remove();
+				});
+				$noty.close();	
+				
+			}
+			
+		}]
+	});	
+
+	
 });
 
 

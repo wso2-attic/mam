@@ -115,6 +115,12 @@ $(document).ready(function() {
 					"sDom" : "<'row-fluid'<'tabel-filter-group span8'T><'span4'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 					"iDisplayLength" : 20,		
 					"bStateSave" : false,
+					"aoColumnDefs": [
+					  {
+					     bSortable: false,
+					     aTargets: [ 0 ]
+					  }
+					],
 					"oTableTools" : {
 						"aButtons" : ["copy", "print", {
 							"sExtends" : "collection",
@@ -130,6 +136,14 @@ $(document).ready(function() {
 					$('#roles_not-installed .main-table input[type=checkbox]:checked').each(function(){
 						roles.push($(this).data('role'));
 					});
+					
+					if ($('#checkAllRoleNotInstalled').prop('checked')) {
+						roles = [];
+						roles.push('Internal/everyone');
+					}
+
+					
+					
 					$.post('/mam/api/apps/roles/install', JSON.stringify({
 						'roles' : roles,
 						'platform':platform,
@@ -138,8 +152,12 @@ $(document).ready(function() {
 						'type': type,
 						'id':id
 					}),function(){
-						$(".alert span").html('App will be installed to selected roles');
-						$(".alert").show();
+						//$(".alert span").html('App will be installed to selected roles');
+						//$(".alert").show();
+						noty({
+							text : 'App will be installed to selected roles',
+							'layout' : 'center'
+						});
 					});
 				});
 			});
@@ -156,6 +174,12 @@ $(document).ready(function() {
 					"sDom" : "<'row-fluid'<'tabel-filter-group span8'T><'span4'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 					"iDisplayLength" : 20,		
 					"bStateSave" : false,
+					"aoColumnDefs": [
+					  {
+					     bSortable: false,
+					     aTargets: [ 0 ]
+					  }
+					],
 					"oTableTools" : {
 						"aButtons" : ["copy", "print", {
 							"sExtends" : "collection",
@@ -171,13 +195,24 @@ $(document).ready(function() {
 					$('#roles_installed .main-table input[type=checkbox]:checked').each(function(){
 						roles.push($(this).data('role'));
 					});
+					
+					if ($('#checkAllRoleInstalled').prop('checked')) {
+						roles = [];
+						roles.push('Internal/everyone');
+					}
+					
+					
 					$.post('/mam/api/apps/roles/uninstall', JSON.stringify({
 						'roles' : roles,
 						'platform':platform,
 						'packageid':packageId
 					}),function(){
-						$(".alert span").html('App will be uninstalled from the selected roles');
-						$(".alert").show();
+						//$(".alert span").html('App will be uninstalled from the selected roles');
+						//$(".alert").show();
+						noty({
+							text : 'App will be installed to selected roles',
+							'layout' : 'center'
+						});
 					});
 				});
 			});
@@ -195,6 +230,12 @@ $(document).ready(function() {
 					"sDom" : "<'row-fluid'<'tabel-filter-group span8'T><'span4'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 					"iDisplayLength" : 20,		
 					"bStateSave" : false,
+					"aoColumnDefs": [
+					  {
+					     bSortable: false,
+					     aTargets: [ 0 ]
+					  }
+					],
 					"oTableTools" : {
 						"aButtons" : ["copy", "print", {
 							"sExtends" : "collection",
@@ -210,13 +251,48 @@ $(document).ready(function() {
 					$('#users_installed .main-table input[type=checkbox]:checked').each(function(){
 						users.push($(this).data('user'));
 					});
+					
+					
+					if ($('#checkAllUserInstalled').prop('checked')) {
+						roles = [];
+						roles.push('Internal/everyone');
+						
+						$.post('/mam/api/apps/roles/install', JSON.stringify({
+							'roles' : roles,
+							'platform':platform,
+							'packageid':packageId
+						}),function(){
+							//$(".alert span").html('App will be uninstalled from the selected roles');
+							//$(".alert").show();
+							noty({
+								text : 'App will be installed to selected roles',
+								'layout' : 'center'
+							});
+						});
+						return;
+					}
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 					$.post('/mam/api/apps/users/uninstall', JSON.stringify({
 						'users' : users,
 						'platform':platform,
 						'packageid':packageId
 					}),function(){
-						$(".alert span").html('App will be uninstalled from the selected users');
-						$(".alert").show();
+						//$(".alert span").html('App will be uninstalled from the selected users');
+						//$(".alert").show();
+						noty({
+							text : 'App will be installed to selected users',
+							'layout' : 'center'
+						});
 					});
 				});
 			});
@@ -234,6 +310,12 @@ $(document).ready(function() {
 					"sDom" : "<'row-fluid'<'tabel-filter-group span8'T><'span4'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 					"iDisplayLength" : 20,		
 					"bStateSave" : false,
+					"aoColumnDefs": [
+					  {
+					     bSortable: false,
+					     aTargets: [ 0 ]
+					  }
+					],
 					"oTableTools" : {
 						"aButtons" : ["copy", "print", {
 							"sExtends" : "collection",
@@ -249,6 +331,32 @@ $(document).ready(function() {
 					$('#users_not-installed .main-table input[type=checkbox]:checked').each(function(){
 						users.push($(this).data('user'));
 					});
+					
+					
+					if ($('#checkAllUserNotInstalled').prop('checked')) {
+						roles = [];
+						roles.push('Internal/everyone');
+						
+						$.post('/mam/api/apps/roles/uninstall', JSON.stringify({
+							'roles' : roles,
+							'platform':platform,
+							'packageid':packageId
+						}),function(){
+							//$(".alert span").html('App will be uninstalled from the selected roles');
+							//$(".alert").show();
+							noty({
+								text : 'App will be installed to selected roles',
+								'layout' : 'center'
+							});
+						});
+						return;
+					}
+					
+					
+					
+					
+					
+					
 					$.post('/mam/api/apps/users/install', JSON.stringify({
 						'users' : users,
 						'platform':platform,
@@ -257,8 +365,12 @@ $(document).ready(function() {
 						'type': type,
 						'id':id
 					}),function(){
-						$(".alert span").html('App will be installed to selected roles');
-						$(".alert").show();
+						//$(".alert span").html('App will be installed to selected roles');
+						//$(".alert").show();
+						noty({
+							text : 'App will be installed to selected user',
+							'layout' : 'center'
+						});
 					});
 				});
 			});
