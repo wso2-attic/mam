@@ -144,8 +144,12 @@ $(document).ready(function() {
 						'type': type,
 						'id':id
 					}),function(){
-						$(".alert span").html('App will be installed to selected roles');
-						$(".alert").show();
+						//$(".alert span").html('App will be installed to selected roles');
+						//$(".alert").show();
+						noty({
+							text : 'App will be installed to selected roles',
+							'layout' : 'center'
+						});
 					});
 				});
 			});
@@ -188,8 +192,12 @@ $(document).ready(function() {
 						'platform':platform,
 						'packageid':packageId
 					}),function(){
-						$(".alert span").html('App will be uninstalled from the selected roles');
-						$(".alert").show();
+						//$(".alert span").html('App will be uninstalled from the selected roles');
+						//$(".alert").show();
+						noty({
+							text : 'App will be installed to selected roles',
+							'layout' : 'center'
+						});
 					});
 				});
 			});
@@ -233,8 +241,12 @@ $(document).ready(function() {
 						'platform':platform,
 						'packageid':packageId
 					}),function(){
-						$(".alert span").html('App will be uninstalled from the selected users');
-						$(".alert").show();
+						//$(".alert span").html('App will be uninstalled from the selected users');
+						//$(".alert").show();
+						noty({
+							text : 'App will be installed to selected users',
+							'layout' : 'center'
+						});
 					});
 				});
 			});
@@ -281,8 +293,12 @@ $(document).ready(function() {
 						'type': type,
 						'id':id
 					}),function(){
-						$(".alert span").html('App will be installed to selected roles');
-						$(".alert").show();
+						//$(".alert span").html('App will be installed to selected roles');
+						//$(".alert").show();
+						noty({
+							text : 'App will be installed to selected user',
+							'layout' : 'center'
+						});
 					});
 				});
 			});
