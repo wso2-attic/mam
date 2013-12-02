@@ -134,6 +134,22 @@ $("#btn-add").click(function() {
 
 
 $( "#modalBlackListAppButton" ).click(function() {
+		var alreadyExist = false;
+		$("#inputBlackListApps option").each(function(){
+    		if($(this).data('type') == $("#modalBlackListType").val() && $(this).val() == $("#modalBlackListPackageName").val() && $(this).data('os') == $("#modalBlackListOS").val() ){
+    			noty({
+							text : 'Added app already exist!',
+							'layout' : 'center',
+							'type': 'error'
+				});
+				alreadyExist = true;
+				return;
+    		}
+		});
+	
+		if(alreadyExist){
+			return;
+		}
 		$("#inputBlackListApps").append('<option data-type="'+ $("#modalBlackListType").val() +'" data-os="'+ $("#modalBlackListOS").val() +'" value="'+ $("#modalBlackListPackageName").val()  +'">' + $("#modalBlackListPackageName").val()  + '</option>');
 });
 
