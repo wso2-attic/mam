@@ -136,6 +136,14 @@ $(document).ready(function() {
 					$('#roles_not-installed .main-table input[type=checkbox]:checked').each(function(){
 						roles.push($(this).data('role'));
 					});
+					
+					if ($('#checkAllRoleNotInstalled').prop('checked')) {
+						roles = [];
+						roles.push('Internal/everyone');
+					}
+
+					
+					
 					$.post('/mam/api/apps/roles/install', JSON.stringify({
 						'roles' : roles,
 						'platform':platform,
@@ -187,6 +195,13 @@ $(document).ready(function() {
 					$('#roles_installed .main-table input[type=checkbox]:checked').each(function(){
 						roles.push($(this).data('role'));
 					});
+					
+					if ($('#checkAllRoleInstalled').prop('checked')) {
+						roles = [];
+						roles.push('Internal/everyone');
+					}
+					
+					
 					$.post('/mam/api/apps/roles/uninstall', JSON.stringify({
 						'roles' : roles,
 						'platform':platform,
@@ -236,6 +251,37 @@ $(document).ready(function() {
 					$('#users_installed .main-table input[type=checkbox]:checked').each(function(){
 						users.push($(this).data('user'));
 					});
+					
+					
+					if ($('#checkAllUserInstalled').prop('checked')) {
+						roles = [];
+						roles.push('Internal/everyone');
+						
+						$.post('/mam/api/apps/roles/install', JSON.stringify({
+							'roles' : roles,
+							'platform':platform,
+							'packageid':packageId
+						}),function(){
+							//$(".alert span").html('App will be uninstalled from the selected roles');
+							//$(".alert").show();
+							noty({
+								text : 'App will be installed to selected roles',
+								'layout' : 'center'
+							});
+						});
+						return;
+					}
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 					$.post('/mam/api/apps/users/uninstall', JSON.stringify({
 						'users' : users,
 						'platform':platform,
@@ -285,6 +331,32 @@ $(document).ready(function() {
 					$('#users_not-installed .main-table input[type=checkbox]:checked').each(function(){
 						users.push($(this).data('user'));
 					});
+					
+					
+					if ($('#checkAllUserNotInstalled').prop('checked')) {
+						roles = [];
+						roles.push('Internal/everyone');
+						
+						$.post('/mam/api/apps/roles/uninstall', JSON.stringify({
+							'roles' : roles,
+							'platform':platform,
+							'packageid':packageId
+						}),function(){
+							//$(".alert span").html('App will be uninstalled from the selected roles');
+							//$(".alert").show();
+							noty({
+								text : 'App will be installed to selected roles',
+								'layout' : 'center'
+							});
+						});
+						return;
+					}
+					
+					
+					
+					
+					
+					
 					$.post('/mam/api/apps/users/install', JSON.stringify({
 						'users' : users,
 						'platform':platform,
