@@ -274,6 +274,16 @@ var store = (function () {
 			data =parse(data.data);
 			return data;	
 		},
+        getAppsFromStorePackageName: function() {
+            var apps = this.getAppsFromStore();
+            var fApps = [];
+            for (var i = apps.length - 1; i >= 0; --i) {
+                var app = apps[i];
+                var fApp = app.attributes.overview_packagename;
+                fApps.push((fApp));
+            }
+            return fApps;
+        },
 		getUsersForAppInstalled : function(package_identifier, platform){
 			var query = buildDynamicQuery(platform, 1);
 			var package_identifier = manipulatePackageId(package_identifier);
