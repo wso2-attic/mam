@@ -26,44 +26,13 @@
 							
 							<form method="post" enctype="multipart/form-data">
 
-							<div class="span2 operation-filter">
-								<div class="control-group">
-									<label class="control-label" for="inputLastName">Start Date</label>
-									<div class="controls">
-										   
-										 <div class="input-append date datepicker"  data-date="" data-date-format="yyyy-mm-dddd">
-				<input id="startdate" name="startdate" class="span2" size="16" type="text" value="{{data.inputData.startdate}}"  >
-				<span class="add-on"><i class="icon-th"></i></span>
-			  </div>
-									  
-									</div>
-								</div>
-							</div>
-							
-							
-							<div class="span2 operation-filter">
-								<div class="control-group">
-									<label class="control-label" for="inputLastName">End Date</label>
-									<div class="controls">
-										   
-										 <div class="input-append date datepicker"  data-date="" data-date-format="yyyy-mm-dddd">
-				<input id="enddate" name="enddate" class="span2" size="16" type="text" value="{{data.inputData.enddate}}" >
-				<span class="add-on"><i class="icon-th"></i></span>
-			  </div>
-									  
-									</div>
-								</div>
-							</div>
+						
 
 							<div class="span2 operation-filter">
 								<div class="control-group">
-									<label class="control-label" for="inputEmail">Platform</label>
+									<label class="control-label" for="inputEmail">Username</label>
 									<div class="controls">
-										<select id="platform" name="platform" >
-											<option {{#compare data.inputData.platform '0'}}selected="selected"{{/compare}} value="0">--All--</option>
-											<option {{#compare data.inputData.platform '1'}}selected="selected"{{/compare}} value="1">Android</option>
-											<option {{#compare data.inputData.platform '2'}}selected="selected"{{/compare}} value="2">iOS</option>
-										</select>
+										<input id="username" name="username" class="span2" size="16" type="text" value="{{data.inputData.username}}" >
 									</div>
 								</div>
 							</div>
@@ -92,23 +61,19 @@
 								class="table table-striped table-bordered" id="main-table">
 									<thead>
 										<tr>
-											<th>Username</th>
-											<th>IMEI</th>
+											<th>Application Name</th>
+											<th>Device Id</th>
 											<th>Platform</th>
-											<th>OS version</th>
-											<th>Registered Date</th>
-											<th>Status</th>											
+											<th>OS version</th>		
 										</tr>
 									</thead>
 									<tbody>
 										{{#data.results}}
 											<tr>
-												<td>{{user_id}}</td>
-												<td>{{imei}}</td>
-												<td>{{platform_name}}</td>
+												<td>{{app_name}}</td>
+												<td>{{device_id}}</td>
+												<td>{{platform}}</td>
 												<td>{{os_version}}</td>
-												<td>{{created_date}}</td>
-												<td>{{status}}</td>
 											</tr>
 										{{/data.results}}
 									</tbody>									
