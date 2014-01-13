@@ -25,7 +25,7 @@ top_ten_apps = function(appController){
 		
 		var reportResults = report.getInstalledApps({platformType : platform});
 		
-		print(reportResults);
+		//print(reportResults);
 		
 		results = reportResults;
 	}
