@@ -201,6 +201,11 @@ var group = (function () {
             }
             return users_list;
         },
+        roleExists:function(ctx){
+            var um = userManager(common.getTenantID());
+            var result = um.roleExists(ctx.groupid);
+            return result;
+        },
         updateUserListOfRole: function(ctx){
             var existingUsers = this.getUsersOfGroup(ctx);
             var addedUsers = ctx.added_users;

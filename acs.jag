@@ -56,6 +56,9 @@
 								var parsedRoles = parse(objUser["roles"]);
 								userFeed.roles = parsedRoles;
 								var isMAMAdmin = false;
+
+
+
 								for (var i = 0; i < parsedRoles.length; i++) {
 									if(parsedRoles[i]=='admin'){
 										userFeed.isAdmin = true;
@@ -69,6 +72,18 @@
                                 if(userFeed.isAdmin || userFeed.isMAMAdmin){
                                     session.put("mamConsoleUserLogin", "true");
                                     session.put("mamConsoleUser", userFeed);
+
+                                    var groupModule = require('/modules/group.js').group;
+                                    var group = new groupModule(db);
+                                    if(!group.roleExists("Internal/mamadmin")){
+                                        var userList = new Array();
+                                        group.addGroup({'name':'Internal/mamadmin','users':userList});
+                                    }
+                                     //Making default policy
+                                    var policyModule = require('modules/policy.js').policy;
+                                    var policy = new policyModule(db);
+
+                                    policy.addDefaultPolicy();
 
                                     var appController =require('/controller/app.js');
                                     response.sendRedirect('console/management');
