@@ -20,11 +20,12 @@ top_ten_apps = function(appController){
 	
 	if(request.getMethod() == 'POST'){
 		
-		var startdate = request.getParameter('startdate');
-		var enddate = request.getParameter('enddate');
+		
 		var platform = request.getParameter('platform');
 		
-		var reportResults = report.getDevicesByRegisteredDate({startDate: startdate, endDate: enddate, platformType : platform});
+		var reportResults = report.getInstalledApps({platformType : platform});
+		
+		print(reportResults);
 		
 		results = reportResults;
 	}
@@ -36,7 +37,7 @@ top_ten_apps = function(appController){
 	context.page = "reports";
 	context.data = {
 		results: results,
-		inputData : {startdate: startdate, enddate: enddate, platform : platform}		
+		inputData : {platform : platform}		
 	};
 	return context;	
 	
@@ -117,11 +118,9 @@ install_app_sum = function(appController){
 	
 	if(request.getMethod() == 'POST'){
 		
-		var startdate = request.getParameter('startdate');
-		var enddate = request.getParameter('enddate');
-		var platform = request.getParameter('platform');
+		var username = request.getParameter('username');
 		
-		var reportResults = report.getDevicesByRegisteredDate({startDate: startdate, endDate: enddate, platformType : platform});
+		var reportResults = report.getInstalledAppsByUser({userid: username});
 		
 		results = reportResults;
 	}
@@ -133,7 +132,7 @@ install_app_sum = function(appController){
 	context.page = "reports";
 	context.data = {
 		results: results,
-		inputData : {startdate: startdate, enddate: enddate, platform : platform}		
+		inputData : {username: username}		
 	};
 	return context;	
 	
