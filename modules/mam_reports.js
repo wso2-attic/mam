@@ -66,11 +66,12 @@ var mam_reports = (function () {
             return installedApps;
         },
 
-        getInstalledAppsByUser: function (user_id) {
+        getInstalledAppsByUser: function (params) {
             var queryString;
-            var results = [], app_info, result, device;
+            var results = [], app_info, result, device, user_id;
             var deviceInfo, devicesInfo;
             //Create the db query based on user id provided
+            user_id = params.userid;
             if (user_id) {
                 queryString = "SELECT n.user_id,p.type_name, d.os_version, n.device_id, n.received_data FROM notifications as n JOIN (SELECT device_id, MAX(received_date) as MaxTimeStamp FROM notifications WHERE feature_code=? AND user_id=? AND received_date != 'NULL' GROUP BY device_id) dt ON (n.device_id = dt.device_id AND n.received_date = dt.MaxTimeStamp) JOIN devices as d ON (n.device_id = d.id) JOIN platforms as p ON (p.id = d.platform_id) WHERE feature_code = ? ORDER BY n.user_id,n.device_id";
                 devicesInfo = db.query(queryString, GET_APP_FEATURE_CODE, user_id, GET_APP_FEATURE_CODE);
@@ -86,37 +87,25 @@ var mam_reports = (function () {
                 appList[appsStore[i].package] = appsStore[i].name;
             }
 
-            for (var i = 0; i < devicesInfo.length;) {
-                result = new Object();
-                result.user_id = devicesInfo[i].user_id;
-                result.devices = [];
-
-                for (var j = i; j < devicesInfo.length;) {
-                    device = {"device_id": devicesInfo[j].device_id, "os_version": devicesInfo[j].os_version, "platform": devicesInfo[j].type_name, "apps": []};
-                    deviceInfo = parse(devicesInfo[j].received_data);
-                    for (var k = 0; k < deviceInfo.length; k++) {
-                        //check whether the installed app is available on app store
-                        if (appList[deviceInfo[k].package] || appList[deviceInfo[k].Identifier]) {
-                            app_info = new Object();
-                            if (device.platform === "Android") {
-                                app_info.name = appList[deviceInfo[k].package];
-                                app_info.package = deviceInfo[k].package;
-                            } else if (device.platform === "iOS") {
-                                app_info.name = appList[deviceInfo[k].Identifier];
-                                app_info.package = deviceInfo[k].Identifier;
-                            }
-                            device.apps.push(app_info);
+            //Temporary patch to make report generation easy
+            for (var i = 0; i < devicesInfo.length; i++) {
+                deviceInfo = parse(devicesInfo[i].received_data);
+                for (var j = 0; j < deviceInfo.length; j++) {
+                    if (appList[deviceInfo[j].package] || appList[deviceInfo[j].Identifier]) {
+                        app_info = new Object();
+                        app_info.platform = devicesInfo[i].type_name;
+                        app_info.device_id = devicesInfo[i].device_id;
+                        app_info.os_version = devicesInfo[i].os_version;
+                        if (devicesInfo[i].type_name == "Android") {
+                            app_info.name = appList[deviceInfo[j].package];
+                            app_info.package = deviceInfo[j].package;
+                        } else if (devicesInfo[i].type_name == "iOS") {
+                            app_info.name = appList[deviceInfo[j].Identifier];
+                            app_info.package = deviceInfo[j].Identifier;
                         }
-                    }
-                    result.devices.push(device);
-                    j++;
-                    i = j;
-                    //break the inner loop when it reaches the data of another user
-                    if ((j < devicesInfo.length) && (result.user_id !== devicesInfo[j].user_id)) {
-                        break;
+                        results.push(app_info);
                     }
                 }
-                results.push(result);
             }
             return results;
         }
