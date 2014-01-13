@@ -87,7 +87,7 @@ $("#btn-add").click(function() {
 	
 	var installedAppData = new Array(); 
 	$('#inputInstallApps :selected').each(function(i, selected){ 
- 		installedAppData.push({identity: $(selected).val(), os: $(selected).data('os'), type: $(selected).data('type')});
+ 		installedAppData.push({identity: $(selected).val(), os: $(selected).data('os'), type: $(selected).data('type'), name: $(selected).data('name')});
 	});
 	
 	if(installedAppData.length > 0){
