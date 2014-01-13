@@ -18,9 +18,6 @@ var store = (function () {
     var mdm = new mdmModule();
 	var configsFile = require('config/mam.js').config();
 	
-
-	var common =  require("/modules/common.js");
-
 	var GET_APP_FEATURE_CODE = '502A';
 	
     function mergeRecursive(obj1, obj2) {
@@ -61,9 +58,18 @@ var store = (function () {
         }
         return configs(tenantId)[USER_MANAGER];
     };
+	var getTenantID = function(){
+		if (Session["mamConsoleUser"]) {
 
+		//	return Session["mamConsoleUser"]['tenantId'];
+	        return "-1234";
+		} else {
+		//	return null;
+	        return "-1234";
+		}
+	}
 	var getAllDeviceCountForGroup = function(role, platform){
-		var um = userManager(common.getTenantID());
+		var um = userManager(getTenantID());
 		if(role!='Internal/everyone'){
 			var userList = um.getUserListOfRole(role);
 	        var deviceCountAll = 0;
@@ -73,13 +79,14 @@ var store = (function () {
 				 role = role.split('/')[1];
 	        	 log.info(role);
 				}
+	        	
 	            var resultDeviceCount = db.query("SELECT COUNT(id) AS device_count FROM devices WHERE user_id = ? AND tenant_id = ? and "+buildPlatformString(platform),
-	                String(role), common.getTenantID());
+	                String(role), getTenantID());
 	            deviceCountAll += parseInt(resultDeviceCount[0].device_count);
 	        }
 		}else{
 			deviceCountAll = db.query("SELECT COUNT(id) AS device_count FROM devices WHERE tenant_id = ? and "+ buildPlatformString(platform),
-	                 common.getTenantID())[0].device_count;
+	                 getTenantID())[0].device_count;
 			log.info(deviceCountAll);
 		}
         return deviceCountAll;
@@ -87,7 +94,7 @@ var store = (function () {
 	var getAllDeviceCountForUser = function(user, platform){
         var deviceCountAll = 0;
             var resultDeviceCount = db.query("SELECT COUNT(id) AS device_count FROM devices WHERE user_id = ? AND tenant_id = ? and "+buildPlatformString(platform),
-            String(user), common.getTenantID());
+            String(user), getTenantID());
         deviceCountAll += parseInt(resultDeviceCount[0].device_count);
         return deviceCountAll;
 	};
@@ -124,9 +131,9 @@ var store = (function () {
 		var platform = buildPlatformString(platform);
 		var query;
 		if(type==1){
-			query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id  from notifications as out_table , devices where out_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and "+platform+"  and  `received_data` like ? and out_table.tenant_id ="+common.getTenantID()+";";
+			query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id  from notifications as out_table , devices where out_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and "+platform+"  and  `received_data` like ?;";
 		}else if (type==2){
-			query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id  from notifications as out_table , devices where out_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and "+platform+"  and  `received_data` not like ? and out_table.tenant_id ="+common.getTenantID()+";";
+			query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id  from notifications as out_table , devices where out_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and "+platform+"  and  `received_data` not like ?;";
 		}
 		return query;
 	}
@@ -267,15 +274,18 @@ var store = (function () {
 			data =parse(data.data);
 			return data;	
 		},
-        getAppsFromStorePackageName: function() {
+		// Get the package and application name of the appications in the store.
+        getAppsFromStorePackageAndName: function() {
             var apps = this.getAppsFromStore();
-            var fApps = [];
+            var appsInfo = [];
             for (var i = apps.length - 1; i >= 0; --i) {
-                var app = apps[i];
-                var fApp = app.attributes.overview_packagename;
-                fApps.push((fApp));
+                var app = apps[i];                
+                var appData = new Object();
+                appData.package = app.attributes.overview_packagename;
+                appData.name = app.attributes.overview_name;
+                appsInfo.push((appData));
             }
-            return fApps;
+            return appsInfo;
         },
 		getUsersForAppInstalled : function(package_identifier, platform){
 			var query = buildDynamicQuery(platform, 1);
