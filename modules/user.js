@@ -272,6 +272,7 @@ var user = (function () {
             var um = userManager(common.getTenantID());
             um.updateRoleListOfUser(ctx.username, deletedRoles, newRoles);
         },
+        
         getUsersByType:function(ctx){//types are administrator,mam,user
             var type = ctx.type;
             var usersByType = new Array();
@@ -421,14 +422,14 @@ var user = (function () {
         
         getTenantDomainFromID: function() {
             if (arguments[0] == "-1234") {
-                return "default";
+                return "carbon.super";
             }
             var carbon = require('carbon');
             var ctx = {};
             ctx.tenantId = arguments[0];
             var tenantDomain = carbon.server.tenantDomain(ctx);
             return tenantDomain;
-        }
+        },
     };
     return module;
 })();

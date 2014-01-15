@@ -6,7 +6,7 @@ var user_group = (function () {
     var user = '';
     var groupModule = require('group.js').group;
     var group = '';
-
+    var common = require('common.js');
     var carbon = require('carbon');
 
     var server = function(){
@@ -72,18 +72,20 @@ var user_group = (function () {
          },
          getRolesOfUserByAssignment:function(ctx){
              var totalGroups = group.getAllGroups({});
-             var removeRoles = new Array("Internal/store", "Internal/publisher", "Internal/reviewer","Internal/mdmadmin");
+             var removeRoles = new Array("Internal/mdmadmin");
              var allRoles = common.removeNecessaryElements(totalGroups,removeRoles);
-            var userRoles = user.getUserRoles(ctx);
-            var array = new Array();
-            if(userRoles.length == 0){
+             log.info("getRolesOfUserByAssignment :"+stringify(allRoles));
+             var userRoles = user.getUserRoles(ctx);
+             log.info("User Roles"+stringify(userRoles));
+             var array = new Array();
+             if(userRoles.length == 0){
                 for(var i=0;i < allRoles.length;i++){
                     var obj = {};
                     obj.name = allRoles[i];
                     obj.available = false;
                     array.push(obj);
                 }
-            }else{
+             }else{
                 for(var i=0;i < allRoles.length;i++){
                     var obj = {};
                     for(var j=0;j< userRoles.length;j++){
@@ -98,12 +100,12 @@ var user_group = (function () {
                     }
                     array.push(obj);
                 }
-            }
-            return array;
-        },
+             }
+             return array;
+        },/*
         getUsersOfRoleByAssignment :function(ctx){
             var usersOfGroup = group.getUsersOfGroup(ctx);
-            var allUsers = user.getAllUserNames(ctx);
+            var allUsers = user.getAllUsers(ctx);
             if(usersOfGroup.length==0){
                 for(var i=0;i<allUsers.length;i++){
                     allUsers[i].available = false;
@@ -121,6 +123,37 @@ var user_group = (function () {
                 }
             }
             return allUsers;
+        },*/
+        getUsersOfRoleByAssignment :function(ctx){
+            var usersOfGroup = group.getUsersOfGroup(ctx);
+            var allUsers = user.getAllUserNames(ctx);
+            var userArray = new Array();
+            if(usersOfGroup.length==0){
+                for(var i=0;i<allUsers.length;i++){
+                    var obj = {};
+                    obj.available = false;
+                    obj.username = allUsers[i];//can be changed as email
+                    userArray.push(obj);
+                }
+            }else{
+                for(var i=0;i<allUsers.length;i++){
+                    for(var j=0;j<usersOfGroup.length;j++){
+                        if(allUsers[i]==usersOfGroup[j].username){
+                            var obj = {};
+                            obj.available = true;
+                            obj.username = allUsers[i];
+                            userArray.push(obj);
+                            break;
+                        }else{
+                            var obj = {};
+                            obj.available = false;
+                            obj.username = allUsers[i];
+                            userArray.push(obj);
+                        }
+                    }
+                }
+            }
+            return userArray;
         },
         sendEmailToGroup: function(ctx){
             var users = group.getUsersOfGroup(ctx);
