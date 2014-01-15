@@ -38,7 +38,7 @@ $(document).ready(function() {
                    ],	
 		
 		
-		"sAjaxSource" : "/mdm/api/webconsole/allUsers",
+		"sAjaxSource" : "/mam/api/webconsole/allUsers",
 		
 	});
 	
