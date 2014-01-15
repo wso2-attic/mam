@@ -44,7 +44,7 @@
 					        var userModule = require('/modules/user.js').user;
 							var db = application.get('db');
 							var user = new userModule(db);
-							var objUser = user.getUser({'userid': username});
+							var objUser = user.getUser({'userid': username, login: true});
 							if(objUser != null){
 								var userFeed = {};
 								userFeed.tenantId = stringify(objUser["tenantId"]);
@@ -56,9 +56,6 @@
 								var parsedRoles = parse(objUser["roles"]);
 								userFeed.roles = parsedRoles;
 								var isMAMAdmin = false;
-
-
-
 								for (var i = 0; i < parsedRoles.length; i++) {
 									if(parsedRoles[i]=='admin'){
 										userFeed.isAdmin = true;
