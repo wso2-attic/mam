@@ -146,7 +146,11 @@ var user = (function () {
             try {
                 var proxy_user = {};
                 var tenantUser = carbon.server.tenantUser(ctx.userid);
-                var um = userManager(tenantUser.tenantId);
+                if(ctx.login){
+                    var um = userManager(tenantUser.tenantId);
+                }else{
+                    var um = userManager(common.getTenantID());
+                }
                 var user = um.getUser(tenantUser.username);
                 var user_roles = user.getRoles();
                 var claims = [claimEmail, claimFirstName, claimLastName];
@@ -233,6 +237,7 @@ var user = (function () {
             var um = userManager(common.getTenantID());
             var roles = um.getRoleListOfUser(ctx.username);
             var roleList = common.removePrivateRole(roles);
+            log.info(roleList);
             return roleList;
         },
         updateRoleListOfUser:function(ctx){
