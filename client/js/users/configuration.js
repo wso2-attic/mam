@@ -39,6 +39,14 @@ $(document).ready(function() {
 		
 		
 		"sAjaxSource" : "/mam/api/webconsole/allUsers",
+		"fnServerParams": function ( aoData ) {
+          	var roleid = getURLParameter('group');
+          	if(roleid != "null"){
+          		 aoData.push( { "name": "groupid", "value": roleid } );
+          	}
+           
+           
+        }
 		
 	});
 	
