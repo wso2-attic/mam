@@ -41,7 +41,7 @@ $(document).ready(function() {
                    ],	
 		
 		
-		"sAjaxSource" : "/mdm/api/webconsole/allUsers",
+		"sAjaxSource" : "/mam/api/webconsole/allUsers",
 		"fnServerParams": function ( aoData ) {
           	var roleid = getURLParameter('group');
           	if(roleid != "null"){
