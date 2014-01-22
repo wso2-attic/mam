@@ -49,6 +49,7 @@
 							if(objUser != null){
 								var userFeed = {};
 								userFeed.tenantId = stringify(objUser["tenantId"]);
+                                userFeed.tenantDomain = user.getTenantDomainFromID(stringify(objUser["tenantId"]));
 								userFeed.username = objUser["username"];
 								userFeed.email = objUser["email"];
 								userFeed.firstName = objUser["firstName"];
