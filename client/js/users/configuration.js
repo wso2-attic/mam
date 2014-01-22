@@ -52,7 +52,7 @@ $(document).ready(function() {
        },
        
        "fnDrawCallback": function( oSettings ) {
-       		$(".tabel-filter-group").html("Type: " + fnCreateSelect( this.fnGetColumnData(3)));
+       		//$(".tabel-filter-group").html("Type: " + fnCreateSelect( this.fnGetColumnData(3)));
 	
 			$('.tabel-filter-group select').change( function () {
 		            oTable.fnFilter( $(this).val(), 3 );
