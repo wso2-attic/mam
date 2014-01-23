@@ -290,6 +290,7 @@ var store = (function () {
                 var appData = new Object();
                 appData.package = app.attributes.overview_packagename;
                 appData.name = app.attributes.overview_name;
+                appData.type = app.attributes.overview_type;
                 appsInfo.push((appData));
             }
             return appsInfo;

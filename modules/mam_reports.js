@@ -68,7 +68,7 @@ var mam_reports = (function () {
 
         getInstalledAppsByUser: function (params) {
             var queryString;
-            var results = [], app_info, result, device, user_id, tenant_id;
+            var results = [], app_info, appData , user_id, tenant_id;
             var deviceInfo, devicesInfo;
             //Create the db query based on user id provided
             user_id = params.userid;
@@ -85,7 +85,7 @@ var mam_reports = (function () {
             var appList = new Object();
             //create a dictionary using the data retrieved from the appStore for quick reference
             for (var i = 0; i < appsStore.length; i++) {
-                appList[appsStore[i].package] = appsStore[i].name;
+                appList[appsStore[i].package] = {"name": appsStore[i].name, "type": appsStore[i].type};
             }
 
             //Temporary patch to make report generation easy
@@ -98,10 +98,14 @@ var mam_reports = (function () {
                         app_info.device_id = devicesInfo[i].device_id;
                         app_info.os_version = devicesInfo[i].os_version;
                         if (devicesInfo[i].type_name == "Android") {
-                            app_info.name = appList[deviceInfo[j].package];
+                            appData = appList[deviceInfo[j].package];
+                            app_info.name = appData.name;
+                            app_info.type = appData.type;
                             app_info.package = deviceInfo[j].package;
                         } else if (devicesInfo[i].type_name == "iOS") {
-                            app_info.name = appList[deviceInfo[j].Identifier];
+                            appData = appList[deviceInfo[j].Identifier];
+                            app_info.name = appData.name;
+                            app_info.type = appData.type;
                             app_info.package = deviceInfo[j].Identifier;
                         }
                         results.push(app_info);
