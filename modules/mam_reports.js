@@ -5,7 +5,6 @@ var mam_reports = (function () {
         CONTEXT: "/"
     };
     var routes = new Array();
-    var log = new Log();
     var db;
     var module = function (dbs) {
         db = dbs;
@@ -24,7 +23,6 @@ var mam_reports = (function () {
         	var devicesInfo;
         	var platform = params.platformType;
             var appsStore = store.getAppsFromStorePackageAndName();
-            log.info(stringify(appsStore));
             
             if (platform == 0) {
             	queryString = "SELECT n.id, p.type_name, n.device_id, n.received_data FROM notifications as n JOIN (SELECT device_id, MAX(received_date) as MaxTimeStamp FROM notifications WHERE feature_code = ? AND received_date != 'NULL' GROUP BY device_id) dt ON (n.device_id = dt.device_id AND n.received_date = dt.MaxTimeStamp) JOIN devices as d ON (n.device_id = d.id) JOIN platforms as p ON (p.id = d.platform_id) WHERE feature_code = ? ORDER BY n.id";
