@@ -127,13 +127,13 @@ var store = (function () {
 	var manipulatePackageId = function(packageid){
 		return "%"+packageid+"%";
 	}
-	var buildDynamicQuery = function(platform, type){
+	var buildDynamicQuery = function(platform, type, tenantId){
 		var platform = buildPlatformString(platform);
 		var query;
 		if(type==1){
-			query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id  from notifications as out_table , devices where out_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and "+platform+"  and  `received_data` like ?;";
+			query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id from notifications as out_table , devices where out_table.`feature_code`='"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`tenant_id`="+tenantId+" and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and "+platform+"  and  `received_data` like ?;";
 		}else if (type==2){
-			query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id  from notifications as out_table , devices where out_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and "+platform+"  and  `received_data` not like ?;";
+			query ="select out_table.id, out_table.user_id, out_table.device_id, out_table.received_data, devices.platform_id  from notifications as out_table , devices where out_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and out_table.`status`='R' and out_table.`tenant_id`="+tenantId+" and out_table.`id` in (select MAX(inner_table.`id`) from notifications as inner_table where inner_table.`feature_code`= '"+GET_APP_FEATURE_CODE+"' and inner_table.`status`='R' and out_table.device_id =inner_table.device_id)  and devices.id=out_table.device_id and "+platform+" and `received_data` not like ?;";
 		}
 		return query;
 	}
@@ -295,7 +295,7 @@ var store = (function () {
             return appsInfo;
         },
 		getUsersForAppInstalled : function(package_identifier, platform){
-			var query = buildDynamicQuery(platform, 1);
+			var query = buildDynamicQuery(platform, 1, getTenantID());
 			var package_identifier = manipulatePackageId(package_identifier);
 			var returnResult = {};
 			query = db.query(query, package_identifier);
@@ -321,7 +321,7 @@ var store = (function () {
 			return returnResult;
 		},
 		getUsersForAppNotInstalled : function(package_identifier, platform){
-			var query = buildDynamicQuery(platform, 2);
+			var query = buildDynamicQuery(platform, 2, getTenantID());
 			var package_identifier = manipulatePackageId(package_identifier);
 			var returnResult = {};
 			query = db.query(query, package_identifier);
@@ -348,7 +348,7 @@ var store = (function () {
 			return returnResult;
 		},
 		getRolesForAppInstalled : function(package_identifier, platform){
-			var query = buildDynamicQuery(platform, 1);
+			var query = buildDynamicQuery(platform, 1, getTenantID());
 			var package_identifier = manipulatePackageId(package_identifier);
 			var returnResult = {};
 			log.info(package_identifier);
@@ -381,7 +381,7 @@ var store = (function () {
 			return returnResult;
 		},
 		getRolesForAppNotInstalled : function(package_identifier, platform){
-			var query = buildDynamicQuery(platform, 2);
+			var query = buildDynamicQuery(platform, 2, getTenantID());
 			var package_identifier = manipulatePackageId(package_identifier);
 			var returnResult = {};
 			query = db.query(query, package_identifier);
