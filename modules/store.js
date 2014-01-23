@@ -58,15 +58,15 @@ var store = (function () {
         }
         return configs(tenantId)[USER_MANAGER];
     };
-	var getTenantID = function(){
-		if (Session["mamConsoleUser"]) {
-
-		//	return Session["mamConsoleUser"]['tenantId'];
-	        return "-1234";
-		} else {
-		//	return null;
-	        return "-1234";
-		}
+	var getTenantID = function() {
+	    if(!(typeof session === "undefined")){
+	        if (session.get("mamConsoleUser") && session.get("mamConsoleUser").tenantId != 0) {
+	            var tenantID = session.get("mamConsoleUser").tenantId;
+	            return tenantID;
+	        } else {
+	            return "-1234";
+	        }
+	    }
 	}
 	var getAllDeviceCountForGroup = function(role, platform){
 		var um = userManager(getTenantID());
@@ -260,7 +260,7 @@ var store = (function () {
 			for (var i = data.length - 1; i >= 0; i--){
 				var app= data[i];
 				if(app.attributes.overview_platform.toUpperCase()!="WEBAPP"){
-					fApps.push(fApp);
+					fApps.push(app);
 				}
 			}
 			return fApps;
