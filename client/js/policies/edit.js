@@ -179,7 +179,7 @@ $(document).ready( function () {
 		success : function(policyData) {
 			//policyData = policyData[0];			
 			$("#policyName").val(policyData.name);			
-			policyContent = JSON.parse(policyData.content);				
+			policyContent = JSON.parse(policyData.mam_content);				
 			for( var i = 0; i < policyContent.length; i++){
 				var code = policyContent[i].code;
 				var data = policyContent[i].data;				
@@ -202,10 +202,8 @@ $(document).ready( function () {
 					
 					
 					if(code == '528B'){
-						for(var j = 0; j < data.length; j++){
-							$("#applist .icon-ok-sign").css("display", "inline");							
-							$('#inputBlackListApps').append('<option value="'+ data[j].identity + '" data-os="'+ data[j].os + '" data-type="'+ data[j].type + '">'+ data[j].identity + '</option>');
-						}
+						$("#applist .icon-ok-sign").css("display", "inline");							
+							$('#inputBlackListApps').append('<option value="'+ value.identity + '" data-os="'+ value.os + '" data-type="'+ value.type + '">'+ value.identity + '</option>');
 					}
 					
 					if(code == '509B'){
