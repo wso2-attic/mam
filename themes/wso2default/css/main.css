@@ -203,6 +203,10 @@ footer .footer-logo {
 
 /* ----- CONTAINER ------- */
 
+.container {
+    margin-top: 20px;
+}
+
 /* ----- BLOCK ------- */
 
 .block {
