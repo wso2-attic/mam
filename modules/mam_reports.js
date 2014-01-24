@@ -39,9 +39,9 @@ var mam_reports = (function () {
             for (var i=0;i<devicesInfo.length;i++) {
                 deviceInfo = parse(devicesInfo[i].received_data);
                 for(var j=0;j<deviceInfo.length;j++){
-                    if (devicesInfo[i].type_name == "Android") {
-                        existingApps.push(deviceInfo[j].package);                       
-                    } else if (devicesInfo[i].type_name == "iOS") {
+                    if (devicesInfo[i].type_name.toUpperCase() === "ANDROID") {
+                        existingApps.push(deviceInfo[j].package);
+                    } else if (devicesInfo[i].type_name.toUpperCase() === "IOS") {
                         existingApps.push(deviceInfo[j].Identifier);
                     }
                 }       
@@ -106,12 +106,12 @@ var mam_reports = (function () {
                         app_info.platform = devicesInfo[i].type_name;
                         app_info.device_id = devicesInfo[i].device_id;
                         app_info.os_version = devicesInfo[i].os_version;
-                        if (devicesInfo[i].type_name == "Android") {
+                        if (devicesInfo[i].type_name.toUpperCase() === "ANDROID") {
                             appData = appList[deviceInfo[j].package];
                             app_info.name = appData.name;
                             app_info.type = appData.type;
                             app_info.package = deviceInfo[j].package;
-                        } else if (devicesInfo[i].type_name == "iOS") {
+                        } else if (devicesInfo[i].type_name.toUpperCase() === "IOS") {
                             appData = appList[deviceInfo[j].Identifier];
                             app_info.name = appData.name;
                             app_info.type = appData.type;
