@@ -39,9 +39,9 @@ var mam_reports = (function () {
             for (var i=0;i<devicesInfo.length;i++) {
                 deviceInfo = parse(devicesInfo[i].received_data);
                 for(var j=0;j<deviceInfo.length;j++){
-                    if (devicesInfo[i].type_name == "Android") {
-                        existingApps.push(deviceInfo[j].package);                       
-                    } else if (devicesInfo[i].type_name == "iOS") {
+                    if (devicesInfo[i].type_name.toUpperCase() === "ANDROID") {
+                        existingApps.push(deviceInfo[j].package);
+                    } else if (devicesInfo[i].type_name.toUpperCase() === "IOS") {
                         existingApps.push(deviceInfo[j].Identifier);
                     }
                 }       
