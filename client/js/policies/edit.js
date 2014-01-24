@@ -137,6 +137,19 @@ $("#btn-add").click(function() {
 
 $( "#modalBlackListAppButton" ).click(function() {
 		var alreadyExist = false;
+		
+		
+		if($("#modalBlackListPackageName").val() == ""){
+			
+			noty({
+							text : 'Please add package/bundle name',
+							'layout' : 'center',
+							'type': 'error'
+			});
+			return;
+		}
+		
+		
 		$("#inputBlackListApps option").each(function(){
     		if($(this).data('type') == $("#modalBlackListType").val() && $(this).val() == $("#modalBlackListPackageName").val() && $(this).data('os') == $("#modalBlackListOS").val() ){
     			noty({
