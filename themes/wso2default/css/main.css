@@ -237,8 +237,6 @@ footer .footer-logo {
     font-weight: bold;
 }
 
-}
-
 .block-body {
     margin: 10px;
     padding-left: 0px;
@@ -648,4 +646,17 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
     background-color: #999;
     height: 6px;
     width: 0px;
+}
+
+/***********************************************
+* Install, Uninstall: buttons styling
+**********************************************/
+
+.install-btn {
+    width: 80px;
+}
+
+.uninstall-btn {
+    margin-left: 10px;
+    width: 80px;
 }
