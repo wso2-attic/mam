@@ -68,6 +68,16 @@ var store = (function () {
 	        }
 	    }
 	}
+	var getTenantDomainFromID = function() {
+	    if (arguments[0] == "-1234") {
+	        return "carbon.super";
+	    }
+	    var carbon = require('carbon');
+	    var ctx = {};
+	    ctx.tenantId = arguments[0];
+	    var tenantDomain = carbon.server.tenantDomain(ctx);
+	    return tenantDomain;
+	}
 	var getAllDeviceCountForGroup = function(role, platform){
 		var um = userManager(getTenantID());
 		if(role!='Internal/everyone'){
@@ -141,7 +151,7 @@ var store = (function () {
 		ctx - url, platform, ctx.id, ctx.packageid
 	*/
 	var buildInstallParam = function(ctx){
-		var installParam = configs.archieve_location+ctx.url;
+		var installParam = configsFile.archieve_location+ctx.url;
 		if (ctx.platform.toUpperCase() == 'IOS'){
 			installParam = configsFile.archieve_location+"/mam/api/apps/install/ios/"+ctx.id;
 		}
@@ -254,13 +264,14 @@ var store = (function () {
         },
 		// [{"id" : "6a680b0a-4f7a-42a2-9f68-3bc6ff377818", "type" : "mobileapp", "path" : "/_system/governance/mobileapps/android/Batman/1.0", "lifecycle" : "MobileAppLifeCycle", "lifecycleState" : "Published", "mediaType" : "application/vnd.wso2-mobileapp+xml", "attributes" : {"overview_status" : "null", "overview_name" : "Batman", "overview_url" : "/upload/MbAk3app.apk", "overview_bundleversion" : "1.0.1", "overview_packagename" : "com.wb.goog.ArkhamCity", "overview_category" : "iOS,Android,Web Clips", "images_thumbnail" : "/publisher//upload/GTbdSicon.png", "overview_type" : "Enterprise", "overview_description" : "sdfjkdslfj ", "overview_recentchanges" : "wieruweoir ", "overview_version" : "1.0", "images_screenshots" : "/publisher//upload/8UISPscreenshot1.jpg,/publisher//upload/ElLTAscreenshot2.jpg,", "overview_provider" : "admin@admin.com", "images_banner" : "/publisher//upload/8PnYgbanner.jpg", "overview_appid" : "null", "overview_platform" : "android"}, "content" : {}, "rating" : {"average" : 0.0, "user" : 0}, "indashboard" : false}, {"id" : "e23f5cf0-d1be-421d-a44e-74bd0ab65fff", "type" : "mobileapp", "path" : "/_system/governance/mobileapps/android/Zip Archiver/1.0", "lifecycle" : "MobileAppLifeCycle", "lifecycleState" : "Published", "mediaType" : "application/vnd.wso2-mobileapp+xml", "attributes" : {"overview_status" : "null", "overview_name" : "Zip Archiver", "overview_url" : "/upload/mGc3Happ.apk", "overview_bundleversion" : "0.6.1", "overview_packagename" : "org.b1.android.archiver", "overview_category" : "iOS,Android,Web Clips", "images_thumbnail" : "/publisher//upload/1eLXXicon.png", "overview_type" : "Enterprise", "overview_description" : "dfdslkfj ", "overview_recentchanges" : "wurowieur ", "overview_version" : "1.0", "images_screenshots" : "/publisher//upload/n5iv6screenshot2.jpg,/publisher//upload/Zu0Qkscreenshot1.jpg,", "overview_provider" : "admin@admin.com", "images_banner" : "/publisher//upload/s6jCKbanner.png", "overview_appid" : "null", "overview_platform" : "android"}, "content" : {}, "rating" : {"average" : 0.0, "user" : 0}, "indashboard" : false}]
 		getAppsFromStore : function(page){
-			var url  = configsFile.store_location+"/apis/assets/mobileapp";
+			var url  = configsFile.store_location+"/apis/assets/mobileapp"+"?domain="+getTenantDomainFromID(getTenantID());
 			if(page!=null){
-				url  = configsFile.store_location+"/apis/assets/mobileapp/paging?page="+page;
+				url  = configsFile.store_location+"/apis/assets/mobileapp/paging?page="+page+"&domain="+getTenantDomainFromID(getTenantID());
 			}
 			var data = get(url, {});
 			log.info(url);
 			var fApps =[];
+			log.info(data);
 			data =parse(data.data);
 			for (var i = data.length - 1; i >= 0; i--){
 				var app= data[i];
@@ -281,7 +292,7 @@ var store = (function () {
 			return fApps;
 		},
 		getAppFromStore : function(id){
-			var url  = configsFile.store_location+"/apis/asset/mobileapp?id="+id;
+			var url  = configsFile.store_location+"/apis/asset/mobileapp?id="+id+"&domain="+getTenantDomainFromID(getTenantID());
 			var data = get(url, {});
 			data =parse(data.data);
 			return data;	
@@ -349,6 +360,74 @@ var store = (function () {
 					userVal.device_count = userVal.device_count+1;
 					userVal.devices.push(result.device_id);
 					userVal.roles = parse(userObj.roles);
+				}
+			};
+			return returnResult;
+		},
+		getRolesForApp: function(package_identifier, platform, query_type){
+			//If query_type is 2 device ids are returned
+			var query = buildDynamicQuery(platform, 1, getTenantID());
+			var package_identifier = manipulatePackageId(package_identifier);
+			var returnResult = {};
+			query = db.query(query, package_identifier);
+
+			for (var i = query.length - 1; i >= 0; i--){
+				var result = query[i];
+				var userObj = user.getUser({userid:result.user_id});
+				if(userObj!=undefined){
+					if(userObj.roles!=undefined){
+						userObj.roles = parse(userObj.roles);
+						userObj.roles = removePrivateRole(userObj.roles);
+						for (var j = userObj.roles.length - 1; j >= 0; j--){
+							var role = userObj.roles[j];
+							var roleVal = returnResult[role];
+							if(roleVal==undefined){
+								returnResult[role] = {
+									device_install_count: 0,
+									device_not_install_count: 0,
+									devices:[]
+								}
+								roleVal = returnResult[role];
+							}
+							roleVal.total_devices = getAllDeviceCountForGroup(role, platform);
+							roleVal.device_install_count = roleVal.device_install_count+1;
+							if(query_type==2){
+								roleVal.devices.push(result.device_id);
+							}
+						};	
+					}
+				}
+			};
+			log.info(package_identifier);
+			query = buildDynamicQuery(platform, 2, getTenantID());
+			log.info(query);
+			query = db.query(query, package_identifier);
+			
+			for (var i = query.length - 1; i >= 0; i--){
+				var result = query[i];
+				var userObj = user.getUser({userid:result.user_id});
+				if(userObj!=undefined){
+					if(userObj.roles!=undefined){
+						userObj.roles = parse(userObj.roles);
+						userObj.roles = removePrivateRole(userObj.roles);
+						for (var j = userObj.roles.length - 1; j >= 0; j--){
+							var role = userObj.roles[j];
+							var roleVal = returnResult[role];
+							if(roleVal==undefined){
+								returnResult[role] = {
+									device_install_count: 0,
+									device_not_install_count: 0,
+									devices:[]
+								}
+								roleVal = returnResult[role];
+							}
+							roleVal.device_not_install_count = roleVal.device_not_install_count+1;
+							if(query_type==2){
+								roleVal.devices.push(result.device_id);
+							}
+							
+						};	
+					}
 				}
 			};
 			return returnResult;
