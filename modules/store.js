@@ -141,15 +141,20 @@ var store = (function () {
 		ctx - url, platform, ctx.id, ctx.packageid
 	*/
 	var buildInstallParam = function(ctx){
-		var installParam = configsFile.archieve_location+ctx.url;
+		var installParam = configs.archieve_location+ctx.url;
 		if (ctx.platform.toUpperCase() == 'IOS'){
 			installParam = configsFile.archieve_location+"/mam/api/apps/install/ios/"+ctx.id;
 		}
-		if(ctx.type == "Market"){
-			installParam = ctx.packageid;
+		if(ctx.type == "Market" || ctx.type == "VPP"){
+			if(ctx.platform.toUpperCase() == 'IOS'){
+				installParam = getApp(ctx.id).attributes.overview_appid;
+			}else{
+				installParam = ctx.packageid;
+			}
 		}
 		return installParam;
 	}
+	
     // prototype
     module.prototype = {
         constructor: module,
