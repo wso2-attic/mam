@@ -269,9 +269,7 @@ var store = (function () {
 				url  = configsFile.store_location+"/apis/assets/mobileapp/paging?page="+page+"&domain="+getTenantDomainFromID(getTenantID());
 			}
 			var data = get(url, {});
-			log.info(url);
 			var fApps =[];
-			log.info(data);
 			data =parse(data.data);
 			for (var i = data.length - 1; i >= 0; i--){
 				var app= data[i];
