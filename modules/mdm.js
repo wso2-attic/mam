@@ -63,7 +63,7 @@ var mdm = (function () {
 			var result = jsonPost(url, data);
 		},
 		enforce: function(policyid){
-			var url = configs.mdm.api+'/external/policies/'+policyid+'/enforce';
+			var url = configs.mdm.api+'/policies/external/'+policyid+'/enforce';
 			var result = jsonPost(url, []);
 		}
     };
