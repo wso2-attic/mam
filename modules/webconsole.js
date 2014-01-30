@@ -75,6 +75,9 @@ var webconsole = (function () {
             var all_users;
             var search = ctx.sSearch;
             var userType = ctx.userType;
+            if(userType){
+                userType = userType.toLowerCase();
+            }
             if(ctx.groupid != null || ctx.groupid != undefined) {
                 all_users = user.getAllUserNamesByRole(ctx);
             } else {
@@ -106,7 +109,7 @@ var webconsole = (function () {
                         flag = 1;
                         if(userType){
                             if(userType=="mam" || userType=="user"){
-                                break main;
+                                continue main;
                             }
                         }
                         break;
@@ -114,7 +117,7 @@ var webconsole = (function () {
                         flag = 2;
                         if(userType){
                             if(userType=="admin" || userType=="user"){
-                                break main;
+                                continue main;
                             }
                         }
                         break;
@@ -122,7 +125,7 @@ var webconsole = (function () {
                         flag = 0;
                         if(userType){
                             if(userType=="admin" || userType=="mam"){
-                                break main;
+                                continue main;
                             }
                         }
                     }
