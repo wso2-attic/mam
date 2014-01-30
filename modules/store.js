@@ -264,19 +264,27 @@ var store = (function () {
         },
 		// [{"id" : "6a680b0a-4f7a-42a2-9f68-3bc6ff377818", "type" : "mobileapp", "path" : "/_system/governance/mobileapps/android/Batman/1.0", "lifecycle" : "MobileAppLifeCycle", "lifecycleState" : "Published", "mediaType" : "application/vnd.wso2-mobileapp+xml", "attributes" : {"overview_status" : "null", "overview_name" : "Batman", "overview_url" : "/upload/MbAk3app.apk", "overview_bundleversion" : "1.0.1", "overview_packagename" : "com.wb.goog.ArkhamCity", "overview_category" : "iOS,Android,Web Clips", "images_thumbnail" : "/publisher//upload/GTbdSicon.png", "overview_type" : "Enterprise", "overview_description" : "sdfjkdslfj ", "overview_recentchanges" : "wieruweoir ", "overview_version" : "1.0", "images_screenshots" : "/publisher//upload/8UISPscreenshot1.jpg,/publisher//upload/ElLTAscreenshot2.jpg,", "overview_provider" : "admin@admin.com", "images_banner" : "/publisher//upload/8PnYgbanner.jpg", "overview_appid" : "null", "overview_platform" : "android"}, "content" : {}, "rating" : {"average" : 0.0, "user" : 0}, "indashboard" : false}, {"id" : "e23f5cf0-d1be-421d-a44e-74bd0ab65fff", "type" : "mobileapp", "path" : "/_system/governance/mobileapps/android/Zip Archiver/1.0", "lifecycle" : "MobileAppLifeCycle", "lifecycleState" : "Published", "mediaType" : "application/vnd.wso2-mobileapp+xml", "attributes" : {"overview_status" : "null", "overview_name" : "Zip Archiver", "overview_url" : "/upload/mGc3Happ.apk", "overview_bundleversion" : "0.6.1", "overview_packagename" : "org.b1.android.archiver", "overview_category" : "iOS,Android,Web Clips", "images_thumbnail" : "/publisher//upload/1eLXXicon.png", "overview_type" : "Enterprise", "overview_description" : "dfdslkfj ", "overview_recentchanges" : "wurowieur ", "overview_version" : "1.0", "images_screenshots" : "/publisher//upload/n5iv6screenshot2.jpg,/publisher//upload/Zu0Qkscreenshot1.jpg,", "overview_provider" : "admin@admin.com", "images_banner" : "/publisher//upload/s6jCKbanner.png", "overview_appid" : "null", "overview_platform" : "android"}, "content" : {}, "rating" : {"average" : 0.0, "user" : 0}, "indashboard" : false}]
 		getAppsFromStore : function(page){
-			var url  = configsFile.store_location+"/apis/assets/mobileapp"+"?domain="+getTenantDomainFromID(getTenantID());
-			if(page!=null){
-				url  = configsFile.store_location+"/apis/assets/mobileapp/paging?page="+page+"&domain="+getTenantDomainFromID(getTenantID());
-			}
-			var data = get(url, {});
+			/* 
+				Processing pagniation 
+			*/
+			var pagination = true;
 			var fApps =[];
-			data =parse(data.data);
-			for (var i = data.length - 1; i >= 0; i--){
-				var app= data[i];
-				if(app.attributes.overview_platform.toUpperCase()!="WEBAPP"){
-					fApps.push(app);
+			var page = 1;
+			do{
+				var url  = configsFile.store_location+"/apis/assets/mobileapp"+"?domain="+getTenantDomainFromID(getTenantID())+"&page="+page;
+				var data = get(url, {});
+				data =parse(data.data);
+				if(data.length==0){
+					pagination =false;
 				}
-			}
+				for (var i = data.length - 1; i >= 0; i--){
+					var app= data[i];
+					if(app.attributes.overview_platform.toUpperCase()!="WEBAPP"){
+						fApps.push(app);
+					}
+				}
+				page++;
+			}while (pagination);
 			return fApps;
 		},
 		getAppsFromStoreFormatted: function(){
