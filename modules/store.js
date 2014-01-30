@@ -87,7 +87,7 @@ var store = (function () {
 	        	var role = userList[j];
 	        	if(role.indexOf('/') !== -1){
 				 role = role.split('/')[1];
-	        	 log.info(role);
+	        	 log.debug(role);
 				}
 	        	
 	            var resultDeviceCount = db.query("SELECT COUNT(id) AS device_count FROM devices WHERE user_id = ? AND tenant_id = ? and "+buildPlatformString(platform),
@@ -97,7 +97,7 @@ var store = (function () {
 		}else{
 			deviceCountAll = db.query("SELECT COUNT(id) AS device_count FROM devices WHERE tenant_id = ? and "+ buildPlatformString(platform),
 	                 getTenantID())[0].device_count;
-			log.info(deviceCountAll);
+			log.debug(deviceCountAll);
 		}
         return deviceCountAll;
 	};
@@ -169,7 +169,6 @@ var store = (function () {
     module.prototype = {
         constructor: module,
         getAllDevicesFromEmail: function(ctx){
-           log.info("Test platform :"+ctx.data.platform);
            var devicesArray;
 		   if(ctx.data.platform=='webapp'){
 			user.getUser(ctx.user)
@@ -232,8 +231,8 @@ var store = (function () {
                     }
                }
            }else{
-				log.info(ctx.data.email);
-				log.info(stringify(user.getUser({userid:ctx.data.email})));
+				log.debug(ctx.data.email);
+				log.debug(stringify(user.getUser({userid:ctx.data.email})));
                 var userID = user.getUser({userid:ctx.data.email}).username;
                 var devices = db.query("select * from devices where devices.user_id='"+String(userID)+"'");
                 devicesArray = new Array();
@@ -404,9 +403,7 @@ var store = (function () {
 					}
 				}
 			};
-			log.info(package_identifier);
 			query = buildDynamicQuery(platform, 2, getTenantID());
-			log.info(query);
 			query = db.query(query, package_identifier);
 			
 			for (var i = query.length - 1; i >= 0; i--){
@@ -443,8 +440,6 @@ var store = (function () {
 			var query = buildDynamicQuery(platform, 1, getTenantID());
 			var package_identifier = manipulatePackageId(package_identifier);
 			var returnResult = {};
-			log.info(package_identifier);
-			log.info(query);
 			query = db.query(query, package_identifier);
 			for (var i = query.length - 1; i >= 0; i--){
 				var result = query[i];
@@ -486,7 +481,6 @@ var store = (function () {
 						userObj.roles = removePrivateRole(userObj.roles);
 						for (var j = userObj.roles.length - 1; j >= 0; j--){
 							var role = userObj.roles[j];
-							log.info(role);
 							var roleVal = returnResult[role];
 							if(roleVal==undefined){
 								returnResult[role] = {

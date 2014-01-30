@@ -104,7 +104,7 @@ var webconsole = (function () {
                 roles = parse(roles);
                 var flag = 0;
                 for(var j=0 ;j<roles.length;j++){
-                    log.info("Test iteration2"+roles[j]);
+                    log.debug("Test iteration2"+roles[j]);
                     if(roles[j]=='admin'||roles[j]=='Internal/mdmadmin'||roles[j]=='Internal/mamadmin'){
                         flag = 1;
                         if(userType){
