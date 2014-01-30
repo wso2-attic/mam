@@ -382,7 +382,7 @@ var user = (function () {
             if(ctx.generatedPassword){
                 password_text = "Your password to your login : "+ctx.generatedPassword;
             }
-            content = "Dear "+ ctx.first_name+", "+config.email.emailTemplate+config.HTTPS_URL+"/mdm/api/device_enroll \n "+password_text+" \n"+config.email.companyName;
+            content = "Dear "+ ctx.firstName+", "+config.email.emailTemplate+config.HTTPS_URL+"/mdm/api/device_enroll \n "+password_text+" \n"+config.email.companyName;
             subject = "MAM Enrollment";
 
             var email = require('email');

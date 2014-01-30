@@ -160,7 +160,7 @@ var user = (function () {
 			var u = user.getUser(ctx);
 			if(u!=null){
 				log.info(u)
-				user.sendEmail({'username':String(u.username), 'first_name': String(u.firstName)});
+				user.sendEmail({'username':String(u.username), 'firstName': String(u.firstName)});
 				log.info('Email sent to user with id '+u.username);
 				return;
 			}
