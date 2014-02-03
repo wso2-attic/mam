@@ -47,10 +47,13 @@ var getDatabase = function(){
             db = new Database("EMM_DB");
             application.put(DB_SESSION,db);
         }catch(e){
-            log.error(e);
+            // log.error(e);
         }
     }
     return db;
+}
+var isDatabaseConfigured = function(){
+    db = new Database("EMM_DB");
 }
 
 var removeNecessaryElements = function(list,removeList){
