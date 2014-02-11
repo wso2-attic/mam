@@ -1,7 +1,7 @@
 {
 	"HEADING" : "WSO2 App Management",
 	"TITLE": "WSO2 App Management",
-	"COPYRIGHT": "Copyright (c) 2013 - WSO2 .Inc",
+	"COPYRIGHT": "Copyright (c) 2014 - WSO2 .Inc",
 	
 	"MAM_UI_URI": "/mam/",
     "MAM_API_URI": "/mam/api/",
